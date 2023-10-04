@@ -2,6 +2,7 @@
 This project contains research that I will conduct as a part of GSST's senior research course.
 
 ## Reading the research
+Open the pdf <a href="https://joshuamarkle.github.io/research-project/research.pdf" target="_blank">here</a>.
 - The .pdf file in this project is what contains all of my up-to-date research neatly layed out.
 - The .tex file contains the code that I wrote in order to compile the pdf in LaTeX.
 
