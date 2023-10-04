@@ -1,4 +1,4 @@
-\documentclass{report}
+\documentclass{article}
 
 % Some basic packages
 \usepackage[utf8]{inputenc}
@@ -9,6 +9,7 @@
 \usepackage{float}
 \usepackage{booktabs}
 \usepackage{enumitem}
+\usepackage{array}
 
 % Don't indent paragraphs, leave some space between them
 \usepackage{parskip}
@@ -24,6 +25,9 @@
 \newcommand\Q{\ensuremath{\mathbb{Q}}}
 \newcommand\C{\ensuremath{\mathbb{C}}}
 
+\setcounter{secnumdepth}{0}
+\usepackage{hyperref}
+
 \title{Research Notebook}
 \author{Joshua Markle}
 \date{}
@@ -31,6 +35,87 @@
 
 \maketitle
 
-This research belongs to Joshua Markle.
+\tableofcontents
+\newpage
+
+\section{App Setup}
+
+In this section, I will research different methods of app development with the goal of deciding how to build my app and what I will use to make it.
+
+\subsection{3 October 2023 - App Frameworks}
+
+In order to make an app, some sort of framework that provides a standard way to build and deploy applications.
+
+What I am looking for in a framework:
+
+\begin{itemize}
+				\item Cross platform: Can build to both iOS and Android
+				\item Established community: Pre-existing libraries and a place to go if I run into errors
+\end{itemize}
+
+In my search for suitable framworks, I have found that the two most popular ones are probably going to give me the best success in this project. These two frameworks are called React and Flutter, and dominate most of the app building options.
+
+\begin{tabular}{| l | p{4.8cm} | p{4.8cm} |}  
+\hline  
+ & React Native & Flutter \\ \hline
+General & Made by facebook, React uses JavaScript to make it's components. It offers a variety of UI options and more native experience & Flutter was made by Google and has it's own take on the app development process. It uses Dart to render widgets (display components) \\ \hline
+Pros & 
+
+\begin{itemize}
+				\item Easy to learn and master (JavaScript)
+				\item Native UI unique to iOS and Android
+				\item Best for complex animations
+\end{itemize}
+
+& 
+
+\begin{itemize}
+				\item Dart is similar to other languages I know
+				\item Excelent documentation
+				\item Standard UI across both iOS and Android
+				\item Highly performant
+\end{itemize}
+
+\\ \hline
+Cons & 
+
+\begin{itemize}
+				\item Poor documentation
+				\item Constant updates (many things get deprecated)
+				\item Overwelhming number of options/solutions
+\end{itemize}
+
+& 
+
+\begin{itemize}
+				\item Harder to master
+				\item Limited libraries by 3rd parties
+				\item Large app sizes
+\end{itemize}
+
+\\ \hline
+\end{tabular}  
+
+
+After conducting the research on these two popular frameworks, I have decided to go with the Flutter framework ultimately because of the development process. It has better documentation that is simple and straight to the point and can make working on apps quicker and cause less suffering.
+
+
+\subsection{4 October 2023 - Project Setup}
+
+For this project, I will be using Flutter to build an app.
+
+I have setup my development environment using Neovim, a popular text editor that I have been using for a while. It is highly configurable and I plan of leveraging exactally that to hasten development.
+
+Neovim packages installed:
+\begin{itemize}
+				\item flutter-tools.nvim by akinsho
+				\item vim-lsc and vim-lsc-dart by natebosch
+\end{itemize}
+
+(Packages can be found on GitHub)
+
+Both of these packages allowed me to setup my project and provide helpful code completion. I also installed the Android operating system onto my laptop inorder for me to run a virtual phone on my computer to test out my app in realtime.
+
+Currently, I have created a blank project and am fully preped for development.
 
 \end{document}
