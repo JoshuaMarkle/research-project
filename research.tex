@@ -17,13 +17,27 @@
 % Math stuff
 \usepackage{amsmath, amsfonts, mathtools, amsthm, amssymb}
 
-% Some notation shortcuts
-\newcommand\N{\ensuremath{\mathbb{N}}}
-\newcommand\R{\ensuremath{\mathbb{R}}}
-\newcommand\Z{\ensuremath{\mathbb{Z}}}
-\renewcommand\O{\ensuremath{\emptyset}}
-\newcommand\Q{\ensuremath{\mathbb{Q}}}
-\newcommand\C{\ensuremath{\mathbb{C}}}
+% Define Dart code styling
+\usepackage{listings}
+\usepackage{xcolor}
+\lstdefinestyle{dartstyle}{
+    language=Java,
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{gray},
+    commentstyle=\color{olive},
+    stringstyle=\color{violet},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=dartstyle}
 
 \setcounter{secnumdepth}{0}
 \usepackage{hyperref}
@@ -38,6 +52,19 @@
 \tableofcontents
 \newpage
 
+\section{Timesheet}
+
+\begin{tabular}{|p{3cm}|p{3cm}|}
+	\hline
+	\textbf{Date} & \textbf{Time Completed} \\ \hline
+	3 October 2023 & 2h 30m \\ \hline
+	4 October 2023 & 1h 30m \\ \hline
+	5 October 2023 & 2h \\ \hline
+\end{tabular}
+\newpage
+
+
+
 \section{App Setup}
 
 In this section, I will research different methods of app development with the goal of deciding how to build my app and what I will use to make it.
@@ -46,7 +73,7 @@ In this section, I will research different methods of app development with the g
 
 In order to make an app, some sort of framework that provides a standard way to build and deploy applications.
 
-What I am looking for in a framework:
+\textbf{What I am looking for in a framework:}
 
 \begin{itemize}
 				\item Cross platform: Can build to both iOS and Android
@@ -97,16 +124,21 @@ Cons &
 \end{tabular}  
 
 
-After conducting the research on these two popular frameworks, I have decided to go with the Flutter framework ultimately because of the development process. It has better documentation that is simple and straight to the point and can make working on apps quicker and cause less suffering.
-
+\textbf{Sources}
+\begin{itemize}
+	\item \href{https://www.theseus.fi/bitstream/handle/10024/146232/thesis.pdf}{React Native vs Flutter, cross-platform mobile application frameworks (Wenhao Wu)}
+	\item \href{https://www.simplilearn.com/tutorials/reactjs-tutorial/flutter-vs-react-native}{Flutter vs. React Native: Which One to Choose in 2023? (Chinmayee Deshpande)}
+	\item \href{https://www.browserstack.com/guide/flutter-vs-react-native}{Flutter vs React: A Comparison}
+\end{itemize}
 
 \subsection{4 October 2023 - Project Setup}
 
-For this project, I will be using Flutter to build an app.
+After conducting the research on these two popular frameworks, I have decided to go with the Flutter framework ultimately because of the development process. It has better documentation that is simple and straight to the point and can make working on apps quicker and cause less suffering.
 
 I have setup my development environment using Neovim, a popular text editor that I have been using for a while. It is highly configurable and I plan of leveraging exactally that to hasten development.
 
-Neovim packages installed:
+\textbf{Neovim packages installed:}
+
 \begin{itemize}
 				\item flutter-tools.nvim by akinsho
 				\item vim-lsc and vim-lsc-dart by natebosch
@@ -117,5 +149,90 @@ Neovim packages installed:
 Both of these packages allowed me to setup my project and provide helpful code completion. I also installed the Android operating system onto my laptop inorder for me to run a virtual phone on my computer to test out my app in realtime.
 
 Currently, I have created a blank project and am fully preped for development.
+\newpage
+
+
+\subsection{5 October 2023 - Common Knowledge \& Best Practices}
+
+Before work can be started on any large project, it is important that there is a plan to guide development and ensure that time is not wasted on extra tasks.
+
+\textbf{Notes pertaining to building a flutter app:}
+
+\begin{itemize}
+    \item Widgets: Building blocks of UI
+    \item Stateless Widgets:
+    \begin{itemize}
+        \item Don't store mutable state
+        \item Rebuild only when parent changes
+    \end{itemize}
+    \item Stateful Widgets:
+    \begin{itemize}
+        \item Maintain mutable state
+        \item Can rebuild when internal state changes
+    \end{itemize}
+    \item Packages \& Plugins:
+    \begin{itemize}
+        \item Reusable components
+        \item Find at \url{https://pub.dev/flutter}
+    \end{itemize}
+
+    \item Basic Flutter App Structure
+    \begin{itemize}
+        \item \texttt{main.dart} as the entry point
+        \item Define \texttt{main()} function
+        \item Define at least one \texttt{Widget}
+    \end{itemize}
+
+    \item Creating a New App
+    \begin{itemize}
+        \item Use terminal or command prompt
+        \item \texttt{flutter create [app\_name]}
+        \item \texttt{cd [app\_name]}
+        \item \texttt{flutter run} to start the app
+    \end{itemize}
+
+    \item Additional Resources
+    \begin{itemize}
+        \item Flutter Documentation: \url{https://flutter.dev/docs}
+        \item Flutter Community: \url{https://flutter.dev/community}
+    \end{itemize}
+\end{itemize}
+\newpage
+
+Below is a sample project that builds necessary components for the app and centers text within the center of the screen.
+
+\begin{lstlisting}
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Stateless Widget Example'),
+        ),
+        body: Center(
+          child: Text('Hello, Flutter!'),
+        ),
+      ),
+    );
+  }
+}
+\end{lstlisting}
+
+This code demonstrates a stateless widget and how Flutter structures their app components. Each class can contain Widget that returns a page to the user's screen when called. Stateful widgets on the other hand update in realtime on the user's screen unlike a stateless widget. This is the core of flutter, everything is a widget either stateless or stateful. 
+
+\textbf{Sources Reviewed:}
+
+\begin{itemize}
+	\item \href{https://docs.flutter.dev/get-started/test-drive}{Test Drive (Flutter Documentation)}
+	\item \href{https://www.freecodecamp.org/news/how-to-build-mobile-apps-with-flutter/}{How To Build Mobile Apps With Flutter (FreeCodeCamp)}
+	\item \href{https://www.geeksforgeeks.org/flutter-tutorial/}{GeeksForGeeks Flutter Documentation}
+\end{itemize}
 
 \end{document}
