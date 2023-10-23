@@ -60,12 +60,15 @@
 	3 October 2023 & 2h 30m \\ \hline
 	4 October 2023 & 1h 30m \\ \hline
 	5 October 2023 & 2h \\ \hline
+	14 October 2023 & 5h \\ \hline
+	15 October 2023 & 1h 30m \\ \hline
+	22 October 2023 & 1h 30m \\ \hline
 \end{tabular}
 \newpage
 
 
 
-\section{App Setup}
+\section{App Setup and Learning Process}
 
 In this section, I will research different methods of app development with the goal of deciding how to build my app and what I will use to make it.
 
@@ -201,7 +204,7 @@ Before work can be started on any large project, it is important that there is a
 
 Below is a sample project that builds necessary components for the app and centers text within the center of the screen.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=dartstyle]
 import 'package:flutter/material.dart';
 
 void main() {
@@ -234,5 +237,135 @@ This code demonstrates a stateless widget and how Flutter structures their app c
 	\item \href{https://www.freecodecamp.org/news/how-to-build-mobile-apps-with-flutter/}{How To Build Mobile Apps With Flutter (FreeCodeCamp)}
 	\item \href{https://www.geeksforgeeks.org/flutter-tutorial/}{GeeksForGeeks Flutter Documentation}
 \end{itemize}
+
+
+
+\newpage
+\subsection{14 October 2023 - Sample App}
+
+The purpose of this session is to make a sample app that does something and learn more about flutter's UI system.
+
+After messing around with the UI system, I have learned about the most common features and widgets (A widget is any object within the app that displays, aligns, or alters the screen):
+
+\begin{itemize}
+	\item \textbf{Text}: This widget displays text and the \texttt{style} characteristic allows for different text styles.
+	\item \textbf{Row}: This aligns all children widgets in a row
+	\item \textbf{Container}: A convient way of surrounding oter widgets and specifying various characterstics like: \texttt{width, height, background color, and aligning}. I will probably use this a lot when making modular objects.
+	\item \textbf{FlatButton}: (also TextButton and RaisedButton) Used to create a button with a material design (the app design default to flutter apps)
+	\item \textbf{Scaffold}: A widget that typically holds EVERY other widget. It provides general framework and structure to the the app like adding an \texttt{AppBar} or \texttt{Body} or \texttt{NavigationBar}.
+	\item \textbf{Image}: A way for flutter to render in images
+	\item \textbf{Icon}: A super awesome way to adding icons into any app. Flutter has thousands of builtin icons so I will not have to pay for icons in any app I make.
+	\item \textbf{ListView}: A scrollable list that works well for long lists of items. Each item is also configuable but that looks complicated.
+	\item \textbf{Stack}: A way to stack widgets ontop of each other. Like stacking squares ontop of each other to make a neat image.
+	\item \textbf{Card}: A short and easy way to make a box with rounded corners and a drop shadow. The same exact effect can also be achieved with only containers.
+\end{itemize}
+
+Using a variety of these basic widgets, I was able to tweak the sample app (that is in place when you make a new projects) to change the title and add a container that contains a counter that increments one when a button on the bottom is pressed!
+
+
+
+\newpage
+\subsection{15 October 2023 - Combining Widgets}
+
+The essense of flutter is the ability to combine widgets to make a sleek and functional UI that users will want to interact with. The purpose of this entry is to learn more about combining widgets together in order to make a pretty and user friendly design.
+
+\begin{itemize}
+    \item \textbf{Scaffold with AppBar and FloatingActionButton}: \\ 
+    The \texttt{Scaffold} widget provides a canvas where we can place other widgets like \texttt{AppBar} and \texttt{FloatingActionButton} to quickly establish the basic structure of an app.
+		\begin{lstlisting}[style=dartstyle]
+    Scaffold(
+      appBar: AppBar(title: Text('My App')),
+      body: Center(child: Text('Hello World')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
+    )
+    \end{lstlisting}
+
+    \item \textbf{ListView with ListTile}: \\
+    Combining \texttt{ListView} and \texttt{ListTile} provides a quick way to present lists with additional properties like leading icons and trailing actions.
+		\begin{lstlisting}[style=dartstyle]
+    ListView(
+      children: [
+        ListTile(
+          leading: Icon(Icons.mail),
+          title: Text('Email'),
+          trailing: Icon(Icons.navigate_next),
+        ),
+        ListTile(
+          leading: Icon(Icons.message),
+          title: Text('Messages'),
+          trailing: Icon(Icons.navigate_next),
+        ),
+      ],
+    )
+    \end{lstlisting}
+
+    \item \textbf{Stack with Positioned}: \\
+    This combination is powerful for overlaying widgets on top of each other. With the \texttt{Positioned} widget, we can specify the exact position of a child inside a \texttt{Stack}.
+		\begin{lstlisting}[style=dartstyle]
+    Stack(
+      children: [
+        Container(color: Colors.yellow, child: Text('Background Text')),
+        Positioned(
+          top: 50,
+          left: 50,
+          child: Text('Overlaid Text'),
+        ),
+      ],
+    )
+    \end{lstlisting}
+\end{itemize}
+
+The cool thing about flutter is that everything is modular and adding these widgets is easy and straight forward. Together, they can make something beautiful.
+
+
+
+
+\newpage
+\subsection{22 October 2023 - The Flutter Package System}
+
+The purpose of this entry is to learn about Flutter's packaging system and how I can use other people's code instead of building large features from the groud up.
+
+\textbf{Popular Flutter Packages}
+
+\begin{itemize}
+    \item \textbf{provider}: A state management solution that's recommended by the Flutter team. It simplifies data flow in applications and provides easy access to shared state.
+
+    \item \textbf{http}: A comprehensive package for sending HTTP requests. It provides both low-level classes for sending requests directly and high-level functions for fetching and uploading data.
+
+    \item \textbf{sqflite}: A SQLite plugin for Flutter, allowing for local database storage, querying, and other operations.
+
+    \item \textbf{shared\_preferences}: A package for storing simple data persistently. It wraps around native capabilities to store key-value pairs.
+
+    \item \textbf{flutter\_bloC}: A predictable state management library that helps implement the BLoC (Business Logic Component) design pattern.
+\end{itemize}
+
+\textbf{Installing Flutter Packages}
+The process of installing and using a Flutter package is remarkably streamlined.
+
+\begin{enumerate}
+    \item Navigate to \textcolor{blue}{\texttt{pub.dev}} and search for the desired package.
+    
+		\item On the package's page (typically at \href{https://pub.dev/}{pub.dev}), locate the \textcolor{olive}{\texttt{Installing}} tab. Here, find the package's latest version string.
+    
+    \item In the Flutter project's \texttt{pubspec.yaml} file, add the package under \textcolor{olive}{\texttt{dependencies}} with the correct version. For instance:
+    \begin{verbatim}
+    dependencies:
+      flutter:
+        sdk: flutter
+      provider: ^latest_version
+		\end{verbatim}
+    
+    \item Run \textcolor{olive}{\texttt{flutter pub get}} in the terminal. This will fetch and install the package.
+
+    \item Once installed, the package can import the package in the Dart code with:
+    \begin{verbatim}
+    import 'package:package_name/package_name.dart';
+    \end{verbatim}
+\end{enumerate}
+
+The existence of these packages significantly accelerates the development process, as reinventing the wheel becomes unnecessary. The community-driven nature of the ecosystem means developers can use solutions from experts.
 
 \end{document}
