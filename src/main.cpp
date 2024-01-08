@@ -10,8 +10,8 @@ using namespace std;
 // Constants and data
 const int KEY_COUNT = 30;
 const int NUM_KEYBOARDS = 100;
-const int MAX_MUTATIONS = 10;
-const int NUM_GENERATIONS = 1000;
+const int MAX_MUTATIONS = 100;
+const int NUM_GENERATIONS = 10000;
 const int NUM_GEN_QUOTES = 100;
 const int keyDistances[KEY_COUNT] = {
 	11, 11, 11, 11, 13, 17, 11, 11, 11, 11, // Upper row
@@ -123,24 +123,24 @@ void optimizeKeyboardLayout() {
     vector<vector<char>> keyboards(NUM_KEYBOARDS, qwertyLayout);
     int bestDistance = std::numeric_limits<int>::max();
     vector<char> bestKeyboard = qwertyLayout;
+
+	// Generate a quote for this generation
+	string genQuotes = "";
+	for (int q = 0; q < NUM_GEN_QUOTES; ++q) {
+		genQuotes += getRandomQuote();
+	}
+
     
     for (int generation = 1; generation <= NUM_GENERATIONS; ++generation) {
-		// Generate a quote for this generation
-		string genQuotes = "";
-        for (int q = 0; q < NUM_GEN_QUOTES; ++q) {
-            genQuotes += getRandomQuote();
-        }
-		string genQuote = getRandomQuote();
-
 		// Generate keyboards for this generation
         for (int i = 0; i < NUM_KEYBOARDS; ++i) {
             if (i > 0) {
                 keyboards[i] = bestKeyboard; // Make a copy of the best keyboard
-                mutateLayout(keyboards[i]);   // Mutate the copied layout
+                mutateLayout(keyboards[i]);  // Mutate the copied layout
             }
-            
+			
             // Calculate distance for the current keyboard layout
-            int distance = calculateDistance(keyboards[i], genQuote);
+            int distance = calculateDistance(keyboards[i], genQuotes);
             
             // Update the best keyboard if the distance is smaller
             if (distance < bestDistance) {
@@ -150,17 +150,19 @@ void optimizeKeyboardLayout() {
         }
 
 		// Output the best keyboard from every generation
-		cout << "Generation " << generation << ", Best Keyboard: ";
-        for (char key : bestKeyboard) {
-            cout << key;
-        }
-        cout << endl;
+		if (generation % 10 == true) {
+			cout << "Generation " << generation << ", Best Keyboard (" << bestDistance << "): ";
+			for (char key : bestKeyboard) {
+				cout << key;
+			}
+			cout << endl;
+		} 
     }
 }
 
-// Mutate the keyboard layout (0 to MAX_MUTATIONS)
+// Mutate the keyboard layout (1 to MAX_MUTATIONS)
 void mutateLayout(vector<char>& layout) {
-    int numMutations = rand() % (MAX_MUTATIONS + 1);
+    int numMutations = rand() % MAX_MUTATIONS + 1;
     for (int i = 0; i < numMutations; ++i) {
         // Randomly select two distinct keys to swap
         int index1 = rand() % layout.size();
