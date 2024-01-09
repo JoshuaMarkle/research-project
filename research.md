@@ -2,33 +2,61 @@
 
 ## Table of Contents
 
-- Research Significance
+- 3 October 2023 - Research Significance
 - Keyboard Layouts
-  - The Qwerty Layout
-  - The Dvorak Layout
-  - The Colemak Layout
-- Bash Scripting Keyboard Switch
-- Physical Keyboard Features
-  - Generic Physical Keyboards
-  - Split Keyboards
-  - Ortholinear Keyboards
-  - Curved Keyboards
+  - 5 October 2023 - The Qwerty Layout
+  - 6 October 2023 - The Dvorak Layout
+  - 9 October 2023 - The Colemak Layout
+- 14 October 2023 - Bash Scripting Keyboard Switch
+- 15 October 2023 - Physical Keyboard Features
+  - 22 October 2023 - Generic Physical Keyboards
+  - 2 November 2023 - Split Keyboards
+  - 3 November 2023 - Ortholinear Keyboards
+  - 12 November 2023 - Curved Keyboards
 - Layers
-  - General Keyboard Layers
-  - Symbol Layers
-  - Misc Keyboard Layers
+  - 17 November 2023 - General Keyboard Layers
+  - 21 November 2023 - Symbol Layers
+  - 30 November 2023 - Misc Keyboard Layers
 - AI Enhanced Keyboard Layouts
-  - AI-Enhanced Keyboard Layouts and Genetic Algorithm Experimentation
-  - Genetic & Evolutionary Algorithms
-  - Setting Up Environment
-  - Parameterizing Training Data
-  - Quantifying A Keyboard
-  - Finding Datasets
-  - Building A Minimum Working Product
+  - 7 December 2023 - AI-Enhanced Keyboard Layouts and Genetic Algorithm Experimentation
+  - 8 December 2023 - Genetic & Evolutionary Algorithms
+  - 9 December 2023 - Setting Up Environment
+  - 11 December 2023 - Parameterizing Training Data
+  - 2 January 2023 - Quantifying A Keyboard
+  - 4 January 2023 - Finding Datasets
+  - 5 January 2023 - Building A Minimum Working Product
+
+## Time Sheet
+
+| Date             | Title                                                              | Time Taken |
+| ---------------- | ------------------------------------------------------------------ | ---------- |
+| 3 October 2023   | Research Significance                                              | 1h         |
+| 5 October 2023   | The Qwerty Layout                                                  | 2h 30m     |
+| 6 October 2023   | The Dvorak Layout                                                  | 1h         |
+| 9 October 2023   | The Colemak Layout                                                 | 30m        |
+| 14 October 2023  | Bash Scripting Keyboard Switch                                     | 3h         |
+| 15 October 2023  | Physical Keyboard Features                                         | 1h 20m     |
+| 22 October 2023  | Generic Physical Keyboards                                         | 1h 30m     |
+| 2 November 2023  | Split Keyboards                                                    | 45m        |
+| 3 November 2023  | Ortholinear Keyboards                                              | 30m        |
+| 12 November 2023 | Curved Keyboards                                                   | 30m        |
+| 17 November 2023 | General Keyboard Layers                                            | 1h         |
+| 21 November 2023 | Symbol Layers                                                      | 2h         |
+| 30 November 2023 | Misc Keyboard Layers                                               | 30m        |
+| 7 December 2023  | AI-Enhanced Keyboard Layouts and Genetic Algorithm Experimentation | 30m        |
+| 8 December 2023  | Genetic & Evolutionary Algorithms                                  | 2h         |
+| 9 December 2023  | Setting Up Environment                                             | 2h 30m     |
+| 11 December 2023 | Parameterizing Training Data                                       | 1h 45m     |
+| 2 January 2023   | Quantifying A Keyboard                                             | 30m        |
+| 4 January 2023   | Finding Datasets                                                   | 1h 30m     |
+| 5 January 2023   | Building A Minimum Working Product                                 | 3h         |
+| Total            |                                                                    | 27h 50m    |
+
+---
 
 ## Title: Research Significance
 
-### Date: XXXXXX
+### Date: 3 October 2023
 
 **Objective**: To explore the significance of keyboard layout research in modern computing and ergonomics.
 
@@ -50,7 +78,7 @@ This section is dedicated toward looking at example keyboard layouts to get a be
 
 ## Title: The Qwerty Layout
 
-### Date: XXXXXX
+### Date: 5 October 2023
 
 **Objective**: To explore the historical background of the Qwerty layout and understand the pros and cons.
 
@@ -72,7 +100,7 @@ Critics of Qwerty often point out its inefficiencies, such as increased finger t
 
 ## Title: The Dvorak Layout
 
-### Date: XXXXXX
+### Date: 6 October 2023
 
 **Objective**: To evaluate the Dvorak keyboard layout by outlining its pros and cons.
 
@@ -90,7 +118,7 @@ The Dvorak layout, created by Dr. August Dvorak in the 1930s, was designed with 
 
 ## Title: The Colemak Layout
 
-### Date: XXXXXX
+### Date: 9 October 2023
 
 **Objective**: To analyze the Colemak keyboard layout by delineating its advantages and disadvantages in a comprehensive format.
 
@@ -108,7 +136,7 @@ The Colemak layout, emerging as a modern alternative to QWERTY, is engineered to
 
 ## Title: Bash Scripting Keyboard Switch
 
-### Date: XXXXXX
+### Date: 14 October 2023
 
 **Objective**: Create a small bash script that I can use to switch between keyboard layouts quickly.
 
@@ -142,7 +170,7 @@ This section will focus on the physical aspects of a keyboard and what are the p
 
 ## Title: Generic Physical Keyboards
 
-### Date: XXXXXX
+### Date: 14 October 2023
 
 **Objective**: To understand and analyze the features and functionalities of various popular generic keyboard layouts, focusing on their key distributions and specific design characteristics.
 
@@ -193,7 +221,7 @@ Each of these keyboards have their pros and cons but ultimately, the keyboards t
 
 ## Title: Split Keyboards
 
-### Date: XXXXXX
+### Date: 2 November 2023
 
 **Objective**: To explore the concept of split keyboards and understand their unique features and advantages in ergonomic design.
 
@@ -212,7 +240,7 @@ In summary, split keyboards represent a significant advancement in ergonomic typ
 
 ## Title: Ortholinear Keyboards
 
-### Date: XXXXXX
+### Date: 3 November 2023
 
 **Objective**: To understand the design and utility of ortholinear keyboards and their impact on typing.
 
@@ -231,7 +259,7 @@ Ortholinear keyboards, with their distinct design and potential ergonomic benefi
 
 ## Title: Curved Keyboards
 
-### Date: XXXXXX
+### Date: 12 November 2023
 
 **Objective**: To examine the design and benefits of curved keyboards, which are tailored to the varying lengths of fingers and natural hand posture.
 
@@ -250,7 +278,7 @@ In conclusion, curved keyboards offer a novel approach to ergonomic typing, focu
 
 ## Title: General Keyboard Layers
 
-### Date: XXXXXX
+### Date: 17 November 2023
 
 **Objective**: To elucidate the concept of layers in keyboard design, focusing on the general or basic layer and its functionalities.
 
@@ -266,7 +294,7 @@ One of the goals is to optimize every layer on the keyboard, mainly the general 
 
 ## Title: Symbol Layers
 
-### Date: XXXXXX
+### Date: 21 November 2023
 
 **Objective**: To explore the design and implementation of a symbol layer on keyboards.
 
@@ -284,7 +312,7 @@ There are various existing designs and resources available for reference, such a
 
 ## Title: Misc Keyboard Layers
 
-### Date: XXXXXX
+### Date: 30 November 2023
 
 **Objective**: To understand the purpose and functionality of miscellaneous keyboard layers, such as function layers, and their role in enhancing keyboard utility.
 
@@ -300,7 +328,7 @@ The function layer, for instance, might include keys for F1 to F12 functions, of
 
 ## Title: AI-Enhanced Keyboard Layouts and Genetic Algorithm Experimentation
 
-### Date: XXXXXX
+### Date: 7 December 2023
 
 **Objective**: To explore the current state of AI-enhanced keyboard layouts and outline an experimental approach for creating an optimal keyboard layout using a genetic algorithm.
 
@@ -316,7 +344,7 @@ For my research, the focus will be on designing both a general layer and symbol 
 
 ## Genetic & Evolutionary Algorithms
 
-### Date: XXXXXX
+### Date: 8 December 2023
 
 **Objective**: Research and gain a better understanding of modern literature on genetic algorithms for the purpose of optimizing a keyboard layout using machine learning.
 
@@ -331,7 +359,7 @@ Implementing this involves two approaches:
 
 ## Setting Up Environment
 
-### Date: XXXXXX
+### Date: 9 December 2023
 
 **Objective**: Map out and start work on creating an evironment for development on the code that generates the optimized keyboard layouts based on a genetic algorithm.
 
@@ -366,7 +394,7 @@ The folder structure will resemble something like this:
 
 ## Parameterizing Training Data
 
-### Date: XXXXXX
+### Date: 11 December 2023
 
 **Objective**: Formulate a way to quantify how good a keyboard layout is.
 
@@ -410,7 +438,7 @@ std::vector<char> qwertyLayout = {
 
 ## Quantifying A Keyboard
 
-### Date: XXXXXX
+### Date: 2 January 2023
 
 **Objective**: Construct an equation that will be used to test how good a keyboard is by using the parameterization techniques.
 
@@ -420,7 +448,7 @@ In order to start the machine learning process, there needs to be a good way to 
 
 ## Finding Datasets
 
-### Date: XXXXXX
+### Date: 4 January 2023
 
 **Objective**: Find a good dataset that can be used to train the machine learning algorithm.
 
@@ -474,7 +502,7 @@ Here, we grab a random quote from our dataset, clean it up with regex and then r
 
 ## Building A Minimum Working Product
 
-### Date: XXXXXX
+### Date: 5 January 2023
 
 **Objective**: Create a minimum working product for the algorithm and make it slowly optimize generations of keyboard layouts.
 
