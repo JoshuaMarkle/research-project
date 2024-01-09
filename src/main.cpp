@@ -1,15 +1,15 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
-#include <cstdlib>
-#include <ctime>
+#include<cstdlib>
+#include<ctime>
 #include<limits>
 
 using namespace std;
 
 // Constants and data
 const int KEY_COUNT = 30;
-const int NUM_KEYBOARDS = 100;
+const int NUM_KEYBOARDS = 12;
 const int MAX_MUTATIONS = 100;
 const int NUM_GENERATIONS = 10000;
 const int NUM_GEN_QUOTES = 100;
@@ -41,12 +41,6 @@ int main() {
 	// Start the genetic algorithm
 	optimizeKeyboardLayout();
     return 0;
-
-	// string randQuote = getRandomQuote();
-	// cout << "Random quote: " << randQuote << endl;
-    // cout << "Total quote dist: " << calculateDistance(layout, randQuote) << endl;
-	//
-	// return 0;
 }
 
 // Return the total finger distance traveled over entire text
