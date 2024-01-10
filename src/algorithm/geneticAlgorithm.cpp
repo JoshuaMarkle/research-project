@@ -9,13 +9,13 @@ const int NUM_GENERATIONS = 1000;
 void optimizeKeyboardLayout() {
     srand(static_cast<unsigned>(time(nullptr)));
     
-    vector<vector<char>> keyboards(NUM_KEYBOARDS, qwertyLayout);
+    vector<vector<char>> keyboards(NUM_KEYBOARDS, dvorakLayout);
     int bestValue = std::numeric_limits<int>::max();
-    vector<char> bestKeyboard = qwertyLayout;
-    vector<char> prevBestKeyboard = qwertyLayout;
+    vector<char> bestKeyboard = dvorakLayout;
+    vector<char> prevBestKeyboard = dvorakLayout;
 
 	// Initial Output
-	cout << "Generation 0: Best Keyboard (" << calculateValue(qwertyLayout) << "): qwertyuipasdfghjkl;zxcvbnm,." << endl;
+	cout << "Generation 0: Best Keyboard (" << calculateValue(dvorakLayout) << "): '',.pyfgcrlaoeuidhtns;qjkxbmwvz" << endl;
 
     for (int generation = 1; generation <= NUM_GENERATIONS; ++generation) {
 		// Generate keyboards for this generation
@@ -46,5 +46,13 @@ void optimizeKeyboardLayout() {
 			prevBestKeyboard = bestKeyboard;
 		}
     }
+
+	// Debug: Post genetic algorithm output keyboard
+	cout << endl;
+	for (int i = 1; i < KEY_COUNT + 1; i++) {
+		cout << bestKeyboard[i-1];
+		if (i % 10 == 0) { cout << endl; }
+	}
+	cout << endl;
 }
 

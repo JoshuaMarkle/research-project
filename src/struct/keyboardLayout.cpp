@@ -25,6 +25,11 @@ std::vector<char> qwertyLayout = {
 	'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',
 	'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'
 };
+std::vector<char> dvorakLayout = {
+	'\'', ',', '.', 'p', 'y', 'f', 'g', 'c', 'r', 'l',
+	'a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's',
+	';', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'
+};
 
 // Return the total finger distance traveled over entire text
 int calculateValue(const vector<char>& layout) {

@@ -15,6 +15,7 @@ extern const int KEY_COUNT;
 extern const int keyDistances[];
 extern const int keyEfforts[];
 extern vector<char> qwertyLayout;
+extern vector<char> dvorakLayout;
 
 int calculateValue(const vector<char>& layout);
 void mutateLayout(vector<char>& layout);
