@@ -1,4 +1,4 @@
-# Research Notebook
+# Research Notebook - Joshua Markle
 
 ## Table of Contents
 
