@@ -53,8 +53,8 @@
 | 4 January 2023   | Finding Datasets                        | 1h 30m     |
 | 5 January 2023   | Building A Minimum Working Product      | 3h         |
 | 9 January 2023   | Professionalizing The Project           | 6h 30m     |
-| 10 January 2023  | Adding Key Efforts Into The Calculation | 30m        |
-| Total            |                                         | 34h 20m    |
+| 10 January 2023  | Adding Key Efforts Into The Calculation | 1h         |
+| Total            |                                         | 34h 50m    |
 
 ---
 
@@ -90,6 +90,8 @@ Most computers today have been standardized with the Qwerty layout. The layout w
 
 As more people used Qwerty keyboards, the more necessary it became for others to learn and use the same layout to ensure compatibility in a professional environment. This effect is further amplified by the global nature of technology and communication, wherein a universally recognized standard becomes more convenient and practical.
 
+![The qwerty keyboard layout](docs/qwertyLayout.png)
+
 Critics of Qwerty often point out its inefficiencies, such as increased finger travel and potential for strain, arguing that alternative layouts could offer ergonomic benefits and increased typing speed. However, despite these arguments, the switch to alternative layouts has been slow, primarily due to the ingrained nature of QWERTY in our society and the significant investment required to shift to a new system.
 
 | Advantages of QWERTY                                                                                                                     | Disadvantages of QWERTY                                                                                                                                      |
@@ -110,6 +112,8 @@ Critics of Qwerty often point out its inefficiencies, such as increased finger t
 
 The Dvorak layout, created by Dr. August Dvorak in the 1930s, was designed with the goal of increasing efficiency and reducing finger fatigue. While it offers several ergonomic and potential speed benefits, its adoption faces hurdles such as the learning curve and limited recognition.
 
+![The dvorak keyboard layout](docs/dvorakLayout.png)
+
 | Advantages of Dvorak Layout                                                                                                                 | Disadvantages of Dvorak Layout                                                                                                                 |
 | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Reduced Finger Movement**: Designed to minimize the distance fingers need to travel, potentially increasing typing speed.                 | **Steep Learning Curve**: Transitioning from QWERTY to Dvorak can be challenging and time-consuming, especially for proficient QWERTY typists. |
@@ -127,6 +131,8 @@ The Dvorak layout, created by Dr. August Dvorak in the 1930s, was designed with 
 **Objective**: To analyze the Colemak keyboard layout by delineating its advantages and disadvantages in a comprehensive format.
 
 The Colemak layout, emerging as a modern alternative to QWERTY, is engineered to enhance typing efficiency and ergonomics while retaining some familiarity with the QWERTY arrangement. Its design aims to address the inefficiencies of QWERTY while easing the transition process.
+
+![The colemak keyboard layout](docs/colemakLayout.png)
 
 | Advantages of Colemak Layout                                                                                                                                | Disadvantages of Colemak Layout                                                                                                 |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
