@@ -15,6 +15,10 @@ const int keyEfforts[KEY_COUNT] = {
     7,  8, 10,  6, 10,  4,  2,  5,  5,  3  // Lower row
 };
 
+// Evaluation weights
+const int WEIGHT_TOTAL_DISTANCE = 2;
+const int WEIGHT_TOTAL_EFFORT = 1;
+
 // Example layout
 std::vector<char> qwertyLayout = {
 	'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
@@ -47,15 +51,16 @@ int calculateDistance(const vector<char>& layout) {
     //     cout << pair.first << ": " << pair.second << "%" << endl;
     // }
 
-    // Calculate total distance
-    int totalDistance = 0;
-    for (char key : layout) {
-        int keyIndex = find(layout.begin(), layout.end(), key) - layout.begin();
-        if (keyIndex < layout.size()) { // Check if the key is found
-            double keyDistance = keyDistances[keyIndex];
-            totalDistance += keyDistance * frequencies[key];
-        }
-    }
+	// Calculate total distance & effort
+	int totalDistance = 0;
+	int totalEffort = 0;
+	for (char key : layout) {
+		int keyIndex = find(layout.begin(), layout.end(), key) - layout.begin();
+		if (keyIndex < layout.size()) { // Check if the key is found
+			totalDistance += keyDistances[keyIndex] * frequencies[key]; // Distance of the key location * the frequency of that key
+			totalEffort += keyEfforts[keyIndex] * frequencies[key]; // Effort needed for the key location * the frequency of that key
+		}
+	}
 
     return totalDistance;
 }
@@ -76,4 +81,9 @@ void mutateLayout(vector<char>& layout) {
         // Swap the keys at index1 and index2
         swap(layout[index1], layout[index2]);
     }
+}
+
+// Find keyboard layout objective worth
+int keyboardValue(int& totalDistance, int& totalEffort) {
+	return WEIGHT_TOTAL_DISTANCE * totalDistance + WEIGHT_TOTAL_EFFORT * totalEffort;
 }

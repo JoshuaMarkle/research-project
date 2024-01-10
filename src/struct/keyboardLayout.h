@@ -18,5 +18,6 @@ extern vector<char> qwertyLayout;
 
 int calculateDistance(const vector<char>& layout);
 void mutateLayout(vector<char>& layout);
+int keyboardValue(int& totalDistance, int& totalEffort);
 
 #endif // KEYBOARD_LAYOUT_H

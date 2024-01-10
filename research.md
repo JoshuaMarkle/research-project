@@ -18,39 +18,43 @@
   - 21 November 2023 - Symbol Layers
   - 30 November 2023 - Misc Keyboard Layers
 - AI Enhanced Keyboard Layouts
-  - 7 December 2023 - AI-Enhanced Keyboard Layouts and Genetic Algorithm Experimentation
+  - 7 December 2023 - Genetic Algorithm Experimentation
   - 8 December 2023 - Genetic & Evolutionary Algorithms
   - 9 December 2023 - Setting Up Environment
   - 11 December 2023 - Parameterizing Training Data
   - 2 January 2023 - Quantifying A Keyboard
   - 4 January 2023 - Finding Datasets
   - 5 January 2023 - Building A Minimum Working Product
+  - 9 January 2023 - Professionalizing The Project
+  - 10 January 2023 - Adding Key Effort Into The Calculation
 
 ## Time Sheet
 
-| Date             | Title                                                              | Time Taken |
-| ---------------- | ------------------------------------------------------------------ | ---------- |
-| 3 October 2023   | Research Significance                                              | 1h         |
-| 5 October 2023   | The Qwerty Layout                                                  | 2h 30m     |
-| 6 October 2023   | The Dvorak Layout                                                  | 1h         |
-| 9 October 2023   | The Colemak Layout                                                 | 30m        |
-| 14 October 2023  | Bash Scripting Keyboard Switch                                     | 3h         |
-| 15 October 2023  | Physical Keyboard Features                                         | 1h 20m     |
-| 22 October 2023  | Generic Physical Keyboards                                         | 1h 30m     |
-| 2 November 2023  | Split Keyboards                                                    | 45m        |
-| 3 November 2023  | Ortholinear Keyboards                                              | 30m        |
-| 12 November 2023 | Curved Keyboards                                                   | 30m        |
-| 17 November 2023 | General Keyboard Layers                                            | 1h         |
-| 21 November 2023 | Symbol Layers                                                      | 2h         |
-| 30 November 2023 | Misc Keyboard Layers                                               | 30m        |
-| 7 December 2023  | AI-Enhanced Keyboard Layouts and Genetic Algorithm Experimentation | 30m        |
-| 8 December 2023  | Genetic & Evolutionary Algorithms                                  | 2h         |
-| 9 December 2023  | Setting Up Environment                                             | 2h 30m     |
-| 11 December 2023 | Parameterizing Training Data                                       | 1h 45m     |
-| 2 January 2023   | Quantifying A Keyboard                                             | 30m        |
-| 4 January 2023   | Finding Datasets                                                   | 1h 30m     |
-| 5 January 2023   | Building A Minimum Working Product                                 | 3h         |
-| Total            |                                                                    | 27h 50m    |
+| Date             | Title                                   | Time Taken |
+| ---------------- | --------------------------------------- | ---------- |
+| 3 October 2023   | Research Significance                   | 1h         |
+| 5 October 2023   | The Qwerty Layout                       | 2h 30m     |
+| 6 October 2023   | The Dvorak Layout                       | 1h         |
+| 9 October 2023   | The Colemak Layout                      | 30m        |
+| 14 October 2023  | Bash Scripting Keyboard Switch          | 3h         |
+| 15 October 2023  | Physical Keyboard Features              | 1h 20m     |
+| 22 October 2023  | Generic Physical Keyboards              | 1h 30m     |
+| 2 November 2023  | Split Keyboards                         | 45m        |
+| 3 November 2023  | Ortholinear Keyboards                   | 30m        |
+| 12 November 2023 | Curved Keyboards                        | 30m        |
+| 17 November 2023 | General Keyboard Layers                 | 1h         |
+| 21 November 2023 | Symbol Layers                           | 2h         |
+| 30 November 2023 | Misc Keyboard Layers                    | 30m        |
+| 7 December 2023  | Genetic Algorithm Experimentation       | 30m        |
+| 8 December 2023  | Genetic & Evolutionary Algorithms       | 2h         |
+| 9 December 2023  | Setting Up Environment                  | 2h 30m     |
+| 11 December 2023 | Parameterizing Training Data            | 1h 45m     |
+| 2 January 2023   | Quantifying A Keyboard                  | 30m        |
+| 4 January 2023   | Finding Datasets                        | 1h 30m     |
+| 5 January 2023   | Building A Minimum Working Product      | 3h         |
+| 9 January 2023   | Professionalizing The Project           | 6h 30m     |
+| 10 January 2023  | Adding Key Efforts Into The Calculation | 30m        |
+| Total            |                                         | 34h 20m    |
 
 ---
 
@@ -326,7 +330,7 @@ The function layer, for instance, might include keys for F1 to F12 functions, of
 
 ---
 
-## Title: AI-Enhanced Keyboard Layouts and Genetic Algorithm Experimentation
+## Title: Genetic Algorithm Experimentation
 
 ### Date: 7 December 2023
 
@@ -598,3 +602,189 @@ void mutateLayout(vector<char>& layout) {
     }
 }
 ```
+
+---
+
+## Professionalizing The Project
+
+### 9 January 2023
+
+**Objective**: Organize the project files in order to prepare for large scale changes.
+
+Currently, the project is in contained on one file (the `main.cpp`). This will only get harder to work with as the project gets bigger and there are more and more paremeters to keep track of.
+
+The first method used to rearrange the codebase is to split up the `main.cpp` file. This will make everything modular and easier to test later on as the project gets bigger. The problem with having a really large `main.cpp` file is that changing one small thing about the code will take expontially longer to compile. By spliting up the code into many smaller scripts, it is much faster to compile and even makes the project easier to understand.
+
+**Updated File Stucture**:
+
+```
+.
+├── README.md
+├── Makefile
+├── research.md
+├── research.pdf
+├── bin
+│  └── ...
+├── data
+│  ├── quotes.txt
+│  └── ...
+├── obj
+│  └── ...
+└── src
+   └── ...
+```
+
+The Makefile is how this project will now be complied. It is essentiall a small script that will run a bunch of `bash` code in order to correctly compile the large amonut of source files in the project. The `Makefile` outputs an executable file into the `bin` directory that can then be executed to actually perform the genetic algorithm. It also is used to create `obj` files that make faster compile times.
+
+Inside the `obj` directory, there are temporary files that are used for quicker compile times. This way, when I make a small change to the codebase, then I only have to update one `.o` file in order for complilation.
+
+```
+└── obj
+   ├── algorithm
+   │  └── geneticAlgorithm.o
+   ├── main.o
+   ├── struct
+   │  └── keyboardLayout.o
+   └── utils
+```
+
+**Final Makefile**
+
+```make
+# Compiler settings
+CC = g++
+CFLAGS = -I./algorithm -I./struct -I./utils -I./data
+
+# Define the directories for the build components
+SRCDIR = src
+OBJDIR = obj
+BINDIR = bin
+
+# Define your source files here
+SOURCES := $(wildcard $(SRCDIR)/*.cpp) \
+           $(wildcard $(SRCDIR)/algorithm/*.cpp) \
+           $(wildcard $(SRCDIR)/struct/*.cpp) \
+           $(wildcard $(SRCDIR)/utils/*.cpp)
+
+# Define your object files here
+OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+
+# Define your executable file name here
+EXECUTABLE := $(BINDIR)/main
+
+all: $(BINDIR) $(OBJDIR) $(EXECUTABLE)
+	@$(EXECUTABLE)
+
+$(BINDIR):
+	mkdir -p $@
+
+$(OBJDIR):
+	mkdir -p $@
+	mkdir -p $@/algorithm
+	mkdir -p $@/struct
+	mkdir -p $@/utils
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS)
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -rf $(OBJDIR) $(EXECUTABLE)
+```
+
+Significant changes have also been made to the source code (`src`) directory. The `main.cpp` file has been split up into 6 different source code files. Each one specializes with their own part of the genetic algorithm.
+
+```
+.
+└── src
+   ├── algorithm
+   │  ├── geneticAlgorithm.cpp
+   │  └── geneticAlgorithm.h
+   ├── data
+   │  └── createJson.cpp
+   ├── main.cpp
+   └── struct
+      ├── keyboardLayout.cpp
+      └── keyboardLayout.h
+```
+
+Improvements to the data processing have also speed of the data processing. A new approach to processing the data is used. A small script is used to run through around 2k english quotes and output statistics.
+
+**New English Character Statistics**
+
+```
+  18.235023
+e 9.829422
+t 7.313724
+o 6.900338
+...
+/ 0.000562
+_ 0.000281
+~ 0.00028
+```
+
+> Note: The most common character is the space, which makes sense
+
+These percentages are then used to calculate the total distance traveled with a new formula.
+
+```cpp
+// Calculate total distance
+int totalDistance = 0;
+for (char key : layout) {
+    int keyIndex = find(layout.begin(), layout.end(), key) - layout.begin();
+    if (keyIndex < layout.size()) { // Check if the key is found
+        double keyDistance = keyDistances[keyIndex];
+        totalDistance += keyDistance * frequencies[key]; // Distance of the key location * the frequency of that key
+    }
+}
+```
+
+This new way of calculating the distance traveled is much faster than constantly looping through thousands of quote words. This is the process:
+
+1. Loop through the keys in the keyboard layout
+2. For each key, calculate the distance: key_frequency \* key_position_distance
+3. Add to the running sum of `totalDistance`
+
+---
+
+## Title: Adding Key Effort Into The Calculation
+
+### Date: 10 January 2023
+
+**Objective**: Take into account the amount of effort it takes to hit keys as part of the keyboard evaluation.
+
+Adding in the efforts is easy, just like the key distances, use the `keyIndex` to find the key location in the array of key efforts and then grab the effort it would take to hit the key and multiply that by the frequency of that key. This way, the effort to hit every key is added up, like the distances, and can be used to evaluate the objective worth of the keyboard layout.
+
+```cpp
+// Calculate total distance & effort
+int totalDistance = 0;
+int totalEffort = 0;
+for (char key : layout) {
+    int keyIndex = find(layout.begin(), layout.end(), key) - layout.begin();
+    if (keyIndex < layout.size()) { // Check if the key is found
+        totalDistance += keyDistances[keyIndex] * frequencies[key]; // Distance of the key location * the frequency of that key
+        totalEffort += keyEfforts[keyIndex] * frequencies[key]; // Effort needed for the key location * the frequency of that key
+    }
+}
+```
+
+After keeping the running sum of the effort, there are now two things to take into account when evaluating a keyboard layout. The results of both the `totalDistance` and `totalEffort` are two arbitrary constants that have no relation. To evaluate the keyboard layout, a relationship must be formed. Both variables can be added together to form an overall `value` representing the worth of the keyboard layout. The hard part about forming the relationship between `totalDistance` and `totalEffort` is that it requires a guess and check approach. Each variable needs a weight assigned to it to know how much to contribute to the overall keyboard value.
+
+**Final Equation**
+
+```cpp
+// Evaluation weights
+const int WEIGHT_TOTAL_DISTANCE = 2;
+const int WEIGHT_TOTAL_EFFORT = 1;
+
+// Find keyboard layout objective worth
+int keyboardValue(int& totalDistance, int& totalEffort) {
+	return WEIGHT_TOTAL_DISTANCE * totalDistance + WEIGHT_TOTAL_EFFORT * totalEffort;
+}
+```
+
+Here, the `totalDistance` of the keyboard is weighted twice is much as the `totalEffort`. These values are temporary and are subject to change based on the final outputs and the desired output keyboard layout. Should the keyboard have minimal finger movement or overall easy to type?
+
+---
