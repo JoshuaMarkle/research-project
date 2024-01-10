@@ -16,7 +16,7 @@ const int keyEfforts[KEY_COUNT] = {
 };
 
 // Evaluation weights
-const int WEIGHT_TOTAL_DISTANCE = 2;
+const int WEIGHT_TOTAL_DISTANCE = 1;
 const int WEIGHT_TOTAL_EFFORT = 1;
 
 // Example layout

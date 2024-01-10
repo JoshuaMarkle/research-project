@@ -9,13 +9,13 @@ const int NUM_GENERATIONS = 1000;
 void optimizeKeyboardLayout() {
     srand(static_cast<unsigned>(time(nullptr)));
     
-    vector<vector<char>> keyboards(NUM_KEYBOARDS, dvorakLayout);
+    vector<vector<char>> keyboards(NUM_KEYBOARDS, qwertyLayout);
     int bestValue = std::numeric_limits<int>::max();
-    vector<char> bestKeyboard = dvorakLayout;
-    vector<char> prevBestKeyboard = dvorakLayout;
+    vector<char> bestKeyboard = qwertyLayout;
+    vector<char> prevBestKeyboard = qwertyLayout;
 
 	// Initial Output
-	cout << "Generation 0: Best Keyboard (" << calculateValue(dvorakLayout) << "): '',.pyfgcrlaoeuidhtns;qjkxbmwvz" << endl;
+	cout << "Generation 0: Best Keyboard (" << calculateValue(qwertyLayout) << "): '',.pyfgcrlaoeuidhtns;qjkxbmwvz" << endl;
 
     for (int generation = 1; generation <= NUM_GENERATIONS; ++generation) {
 		// Generate keyboards for this generation
