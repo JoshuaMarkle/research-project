@@ -16,7 +16,7 @@ extern const int keyDistances[];
 extern const int keyEfforts[];
 extern vector<char> qwertyLayout;
 
-int calculateDistance(const vector<char>& layout);
+int calculateValue(const vector<char>& layout);
 void mutateLayout(vector<char>& layout);
 int keyboardValue(int& totalDistance, int& totalEffort);
 

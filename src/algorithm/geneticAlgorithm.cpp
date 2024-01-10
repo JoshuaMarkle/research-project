@@ -1,20 +1,21 @@
 #include "geneticAlgorithm.h"
 
 // Constants for genetic algorithm
-const int NUM_KEYBOARDS = 2;
+const int NUM_KEYBOARDS = 100;
 const int MAX_MUTATIONS = 100;
-const int NUM_GENERATIONS = 100;
+const int NUM_GENERATIONS = 1000;
 
 // Genetic algorithm function
 void optimizeKeyboardLayout() {
     srand(static_cast<unsigned>(time(nullptr)));
     
     vector<vector<char>> keyboards(NUM_KEYBOARDS, qwertyLayout);
-    int bestDistance = std::numeric_limits<int>::max();
+    int bestValue = std::numeric_limits<int>::max();
     vector<char> bestKeyboard = qwertyLayout;
+    vector<char> prevBestKeyboard = qwertyLayout;
 
 	// Initial Output
-	cout << "Generation 0: Best Keyboard (" << calculateDistance(qwertyLayout) << "): qwertyuipasdfghjkl;zxcvbnm,." << endl;
+	cout << "Generation 0: Best Keyboard (" << calculateValue(qwertyLayout) << "): qwertyuipasdfghjkl;zxcvbnm,." << endl;
 
     for (int generation = 1; generation <= NUM_GENERATIONS; ++generation) {
 		// Generate keyboards for this generation
@@ -24,22 +25,26 @@ void optimizeKeyboardLayout() {
                 mutateLayout(keyboards[i]);  // Mutate the copied layout
             }
 			
-            // Calculate distance for the current keyboard layout
-            int distance = calculateDistance(keyboards[i]);
+            // Calculate value for the current keyboard layout
+            int value = calculateValue(keyboards[i]);
+
             
             // Update the best keyboard if the distance is smaller
-            if (distance < bestDistance) {
-                bestDistance = distance;
+            if (value < bestValue) {
+                bestValue = value;
                 bestKeyboard = keyboards[i];
             }
         }
 
-		// Output the best keyboard from every generation
-		cout << "Generation " << generation << ", Best Keyboard (" << bestDistance << "): ";
-		for (char key : bestKeyboard) {
-			cout << key;
+		// Debug: Output only if keyboard layout has changed
+		if (prevBestKeyboard != bestKeyboard) {
+			cout << "Generation " << generation << ", Best Keyboard (" << bestValue << "): ";
+			for (char key : bestKeyboard) {
+				cout << key;
+			}
+			cout << endl;
+			prevBestKeyboard = bestKeyboard;
 		}
-		cout << endl;
     }
 }
 

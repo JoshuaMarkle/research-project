@@ -27,7 +27,7 @@ std::vector<char> qwertyLayout = {
 };
 
 // Return the total finger distance traveled over entire text
-int calculateDistance(const vector<char>& layout) {
+int calculateValue(const vector<char>& layout) {
     // Load frequencies
 	string filename = "data/quotes.txt";
     map<char, double> frequencies;
@@ -62,7 +62,7 @@ int calculateDistance(const vector<char>& layout) {
 		}
 	}
 
-    return totalDistance;
+    return keyboardValue(totalDistance, totalEffort);
 }
 
 // Mutate the keyboard layout (1 to MAX_MUTATIONS)
