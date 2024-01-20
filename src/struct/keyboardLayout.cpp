@@ -4,6 +4,7 @@
 // Constants and data
 const int KEY_COUNT = 30;
 const int MAX_MUTATIONS = 100;
+const int MAX_CROSSOVERS = 10;
 const int keyDistances[KEY_COUNT] = {
 	11, 11, 11, 11, 13, 17, 11, 11, 11, 11, // Upper row
     0,  0,  0,  0,  10, 10,  0,  0,  0,  0, // Home row
@@ -68,6 +69,46 @@ int calculateValue(const vector<char>& layout) {
 	}
 
     return keyboardValue(totalDistance, totalEffort);
+}
+
+std::vector<char> crossover(const std::vector<char>& parent1, 
+                                 const std::vector<char>& parent2) {
+    std::vector<char> child(parent1.size(), '\0');
+    std::unordered_set<char> placedKeys;
+
+    int cycleCount = 0;
+    while (cycleCount < MAX_CROSSOVERS && placedKeys.size() < parent1.size()) {
+        // Find the starting point for the cycle which is not yet in the child
+        auto it = std::find_if(parent1.begin(), parent1.end(),
+                               [&placedKeys](char key) { return placedKeys.find(key) == placedKeys.end(); });
+        if (it == parent1.end()) {
+            break; // All keys have been placed
+        }
+
+        char startKey = *it;
+        char currentKey = startKey;
+        do {
+            // Place the current key from parent1 into the child
+            int indexInParent1 = std::find(parent1.begin(), parent1.end(), currentKey) - parent1.begin();
+            child[indexInParent1] = currentKey;
+            placedKeys.insert(currentKey);
+
+            // Find the next key to place, which is the key at the position of currentKey in parent2
+            int indexInParent2 = std::find(parent2.begin(), parent2.end(), currentKey) - parent2.begin();
+            currentKey = parent1[indexInParent2];
+        } while (currentKey != startKey);
+
+        ++cycleCount;
+    }
+
+    // Fill remaining positions with keys from the other parent
+    for (size_t i = 0; i < child.size(); ++i) {
+        if (child[i] == '\0') {
+            child[i] = parent2[i];
+        }
+    }
+
+    return child;
 }
 
 // Mutate the keyboard layout (1 to MAX_MUTATIONS)

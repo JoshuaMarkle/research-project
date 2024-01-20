@@ -11,18 +11,20 @@ void optimizeKeyboardLayout() {
     
     vector<vector<char>> keyboards(NUM_KEYBOARDS, qwertyLayout);
     int bestValue = std::numeric_limits<int>::max();
-    vector<char> bestKeyboard = qwertyLayout;
-    vector<char> prevBestKeyboard = qwertyLayout;
+    vector<char> bestKeyboard = dvorakLayout;
+    vector<char> prevBestKeyboard = dvorakLayout;
 
 	// Initial Output
-	cout << "Generation 0: Best Keyboard (" << calculateValue(qwertyLayout) << "): '',.pyfgcrlaoeuidhtns;qjkxbmwvz" << endl;
+	cout << "Generation 0: Best Keyboard (" << calculateValue(dvorakLayout) << "): '',.pyfgcrlaoeuidhtns;qjkxbmwvz" << endl;
 
     for (int generation = 1; generation <= NUM_GENERATIONS; ++generation) {
 		// Generate keyboards for this generation
         for (int i = 0; i < NUM_KEYBOARDS; ++i) {
             if (i > 0) {
-                keyboards[i] = bestKeyboard; // Make a copy of the best keyboard
-                mutateLayout(keyboards[i]);  // Mutate the copied layout
+				// Select a random parent for crossover
+                int parentIndex = rand() % NUM_KEYBOARDS;
+                keyboards[i] = crossover(bestKeyboard, keyboards[parentIndex]);
+                mutateLayout(keyboards[i]); // Mutate the resulting layout
             }
 			
             // Calculate value for the current keyboard layout

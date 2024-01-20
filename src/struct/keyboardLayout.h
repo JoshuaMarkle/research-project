@@ -7,6 +7,7 @@
 #include <map>
 #include <fstream>
 #include <algorithm>
+#include <unordered_set>
 
 using namespace std;
 
@@ -20,5 +21,6 @@ extern vector<char> dvorakLayout;
 int calculateValue(const vector<char>& layout);
 void mutateLayout(vector<char>& layout);
 int keyboardValue(int& totalDistance, int& totalEffort);
+std::vector<char> crossover(const std::vector<char>& parent1, const std::vector<char>& parent2);
 
 #endif // KEYBOARD_LAYOUT_H

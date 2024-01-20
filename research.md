@@ -27,6 +27,7 @@
   - 5 January 2023 - Building A Minimum Working Product
   - 9 January 2023 - Professionalizing The Project
   - 10 January 2023 - Adding Key Effort Into The Calculation
+  - 17 January 2023 - Genetic Crossover Implementation
 
 ## Time Sheet
 
@@ -54,7 +55,8 @@
 | 5 January 2023   | Building A Minimum Working Product      | 3h         |
 | 9 January 2023   | Professionalizing The Project           | 6h 30m     |
 | 10 January 2023  | Adding Key Efforts Into The Calculation | 1h         |
-| Total            |                                         | 34h 50m    |
+| 17 January 2023  | Genetic Crossover Implementation        | 1h         |
+| Total            |                                         | 35h 50m    |
 
 ---
 
@@ -792,5 +794,65 @@ int keyboardValue(int& totalDistance, int& totalEffort) {
 ```
 
 Here, the `totalDistance` of the keyboard is weighted twice is much as the `totalEffort`. These values are temporary and are subject to change based on the final outputs and the desired output keyboard layout. Should the keyboard have minimal finger movement or overall easy to type?
+
+---
+
+## Title: Genetic Crossover Implementation
+
+### Date: 17 January 2023
+
+**Objective**: Create and implement an efficient algorithm to merge qualities of successful keyboards.
+
+Crossover is a key part of the evolutionary process. Essentially, it is the combination of traits between members in a population. For the case of keyboard optimization, this looks like taking two keyboards and copying key locations from both locations and then placing them on a new keyboard. This new keyboard then fills in the remaining key locations.
+
+After crossover, the keyboard will then undergo a mutation (switching two random keys) making for a fairly accurate representation of genetic evolution.
+
+For the crossover algorithm, a simple algorithm from "A Deep Genetic Method for Keyboard Layout Optimization" will be used:
+
+First, two parent keyboard layouts are selected. These parents are chosen based on their fitness, which in this context means how efficient or ergonomic they are for typing. The cycle crossover starts by selecting a random key position from one parent layout and copies its corresponding key to the child layout. It then looks at where this key is positioned in the other parent layout and copies the key found in that position back to the first parent to see where it should go in the child layout. This process is repeated, forming a cycle of key positions, until it returns to the original key position. If there are still keys left to be assigned in the child layout after the first cycle is complete, the algorithm starts a new cycle. This time it might start with the other parent as the source. The process continues, creating cycles, until all keys have been assigned positions in the child layout.
+
+**Final Algorithm**
+
+```cpp
+std::vector<char> crossover(const std::vector<char>& parent1,
+                                 const std::vector<char>& parent2) {
+    std::vector<char> child(parent1.size(), '\0');
+    std::unordered_set<char> placedKeys;
+
+    int cycleCount = 0;
+    while (cycleCount < MAX_CROSSOVERS && placedKeys.size() < parent1.size()) {
+        // Find the starting point for the cycle which is not yet in the child
+        auto it = std::find_if(parent1.begin(), parent1.end(),
+                               [&placedKeys](char key) { return placedKeys.find(key) == placedKeys.end(); });
+        if (it == parent1.end()) {
+            break; // All keys have been placed
+        }
+
+        char startKey = *it;
+        char currentKey = startKey;
+        do {
+            // Place the current key from parent1 into the child
+            int indexInParent1 = std::find(parent1.begin(), parent1.end(), currentKey) - parent1.begin();
+            child[indexInParent1] = currentKey;
+            placedKeys.insert(currentKey);
+
+            // Find the next key to place, which is the key at the position of currentKey in parent2
+            int indexInParent2 = std::find(parent2.begin(), parent2.end(), currentKey) - parent2.begin();
+            currentKey = parent1[indexInParent2];
+        } while (currentKey != startKey);
+
+        ++cycleCount;
+    }
+
+    // Fill remaining positions with keys from the other parent
+    for (size_t i = 0; i < child.size(); ++i) {
+        if (child[i] == '\0') {
+            child[i] = parent2[i];
+        }
+    }
+
+    return child;
+}
+```
 
 ---
