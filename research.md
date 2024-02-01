@@ -22,12 +22,13 @@
   - 8 December 2023 - Genetic & Evolutionary Algorithms
   - 9 December 2023 - Setting Up Environment
   - 11 December 2023 - Parameterizing Training Data
-  - 2 January 2023 - Quantifying A Keyboard
-  - 4 January 2023 - Finding Datasets
-  - 5 January 2023 - Building A Minimum Working Product
-  - 9 January 2023 - Professionalizing The Project
-  - 10 January 2023 - Adding Key Effort Into The Calculation
-  - 17 January 2023 - Genetic Crossover Implementation
+  - 2 January 2024 - Quantifying A Keyboard
+  - 4 January 2024 - Finding Datasets
+  - 5 January 2024 - Building A Minimum Working Product
+  - 9 January 2024 - Professionalizing The Project
+  - 10 January 2024 - Adding Key Effort Into The Calculation
+  - 17 January 2024 - Genetic Crossover Implementation
+  - 31 January 2024 - Converting The Codebase to Python
 
 ## Time Sheet
 
@@ -50,13 +51,14 @@
 | 8 December 2023  | Genetic & Evolutionary Algorithms       | 2h         |
 | 9 December 2023  | Setting Up Environment                  | 2h 30m     |
 | 11 December 2023 | Parameterizing Training Data            | 1h 45m     |
-| 2 January 2023   | Quantifying A Keyboard                  | 30m        |
-| 4 January 2023   | Finding Datasets                        | 1h 30m     |
-| 5 January 2023   | Building A Minimum Working Product      | 3h         |
-| 9 January 2023   | Professionalizing The Project           | 6h 30m     |
-| 10 January 2023  | Adding Key Efforts Into The Calculation | 1h         |
-| 17 January 2023  | Genetic Crossover Implementation        | 1h         |
-| Total            |                                         | 35h 50m    |
+| 2 January 2024   | Quantifying A Keyboard                  | 30m        |
+| 4 January 2024   | Finding Datasets                        | 1h 30m     |
+| 5 January 2024   | Building A Minimum Working Product      | 3h         |
+| 9 January 2024   | Professionalizing The Project           | 6h 30m     |
+| 10 January 2024  | Adding Key Efforts Into The Calculation | 1h         |
+| 17 January 2024  | Genetic Crossover Implementation        | 1h         |
+| 31 January 2024  | Coverting The Codebase to Python        | 4h 10m     |
+| Total            |                                         | 40h        |
 
 ---
 
@@ -853,6 +855,168 @@ std::vector<char> crossover(const std::vector<char>& parent1,
 
     return child;
 }
+```
+
+---
+
+## Title: Converting The Codebase to Python
+
+### Date: 31 January 2024
+
+**Objective**: Rewrite all of this project's code into python
+
+This is a large pivot in development and will shape the future of this project significantly. Writing C++ requires a certain level of attention to detail and large amount of things to keep track of all at once. For this reason, teh codebase is exponentially growing larger and getting really difficult to maintain or even make progress. This is why everything should be converted into a simipler language such as Python. Python doesn't require alot of attention to detail and instead, it is easier to focus on actually development. Of course, this will hurt the actual results produced as Python is not the fastest language, especially when compared with C++, the fastest language besides pure machine code. Overall, the conversion to Python will make it easier to proritize adding features and facilitate a faster development.
+
+The new file structure looks like this:
+
+```
+.
+├── data
+│  └── quotes.txt
+├── docs
+│  └── ...
+├── Makefile
+├── README.md
+├── research.md
+├── research.pdf
+└── src
+   ├── __pycache__
+   │  └── ...
+   ├── config.py
+   ├── genetic_algorithm.py
+   ├── keyboard_layout.py
+   └── main.py
+```
+
+Everything is basically the same except for the fact that all of the `.cpp` files are now `.py` files. Everything works basically the same except for performance. The actual results aren't as fast or even as good as the C++ implementation but the code is much easier to understand. The entire codebase has been cut down by 80% as Python is such a straightforward language.
+
+Actually running the code is much different. Before, the `Makefile` that was made in order to run all of the `.cpp`, `.h`, and `.obj` files is now one line: `run: python src/main.py`. Before it was a large mess of tracking the header files and then compiling to object files and then using those new object files in order to optimize faster compile times. Now, I have a simple `__pycache__` directory that is automatically created by Python that does everything that had to be done manually in C++.
+
+**main.py**
+
+```python
+import config
+from genetic_algorithm import optimize_keyboard_layout
+
+if __name__ == "__main__":
+    config.load_frequencies("../data/quotes.txt")
+    optimize_keyboard_layout()
+```
+
+**genetic_algorithm.py**
+
+```python
+import random
+import config
+from keyboard_layout import calculate_value, crossover, mutate_layout
+
+
+def optimize_keyboard_layout():
+    random.seed()
+
+    keyboards = [config.qwerty_layout[:] for _ in range(config.NUM_KEYBOARDS)]
+    best_value = float("inf")
+    best_keyboard = keyboards[0][:]
+
+    print(
+        f"Generation 0: Best Keyboard ({calculate_value(config.qwerty_layout)}): {''.join(config.qwerty_layout)}"
+    )
+
+    for generation in range(1, config.NUM_GENERATIONS + 1):
+        for i in range(config.NUM_KEYBOARDS):
+            if i > 0:
+                parent_index = random.randint(0, config.NUM_KEYBOARDS - 1)
+                keyboards[i] = crossover(best_keyboard, keyboards[parent_index])
+                keyboards[i] = mutate_layout(keyboards[i])
+
+            value = calculate_value(keyboards[i])
+
+            if value < best_value:
+                best_value = value
+                best_keyboard = keyboards[i][:]
+
+        print(
+            f"Generation {generation}, Best Keyboard ({best_value}): {''.join(best_keyboard)}"
+        )
+
+    print("\nFinal Best Keyboard Layout:")
+    for i, key in enumerate(best_keyboard, 1):
+        print(key, end=" ")
+        if i % 10 == 0:
+            print()
+    print()
+
+
+if __name__ == "__main__":
+    config.load_frequencies("data/quotes.txt")
+    optimize_keyboard_layout()
+```
+
+**keyboard_layout.py**
+
+```python
+import random
+import config
+
+def calculate_value(layout):
+    total_distance = sum(
+        config.key_distances[i] * config.frequencies.get(layout[i], 0)
+        for i in range(config.KEY_COUNT)
+    )
+    total_effort = sum(
+        config.key_efforts[i] * config.frequencies.get(layout[i], 0)
+        for i in range(config.KEY_COUNT)
+    )
+    return total_distance + total_effort
+
+def mutate_layout(layout):
+    for _ in range(random.randint(1, config.MAX_MUTATIONS)):
+        index1, index2 = random.sample(range(len(layout)), 2)
+        layout[index1], layout[index2] = layout[index2], layout[index1]
+    return layout
+
+def crossover(parent1, parent2):
+    child = parent1[: len(parent1) // 2]  # Start with the first half of parent1
+    for key in parent2:  # Fill in the rest with keys from parent2 that aren't already in the child
+        if key not in child:
+            child.append(key)
+    return child
+```
+
+**config.py**
+
+```python
+# Constants
+KEY_COUNT = 30
+MAX_MUTATIONS = 100
+NUM_KEYBOARDS = 100
+NUM_GENERATIONS = 100
+
+# Code abstracted for simplicity
+key_distances = [
+    ...
+]
+key_efforts = [
+    ...
+]
+
+# Default layouts
+qwerty_layout = list("qwertyuiopasdfghjkl;zxcvbnm,./")
+dvorak_layout = list("',.pyfgcrlaoeuidhtns;qjkxbmwvz")
+
+frequencies = None
+
+def load_frequencies(file_path):
+    global frequencies
+    frequencies = {}
+    with open(file_path, "r") as file:
+        for line in file:
+            parts = line.strip().split(" ")
+            char = (
+                " " if parts[0] == "" else parts[0]
+            )  # Handle space as the first character
+            freq = float(parts[-1])  # Frequency is the last part
+            frequencies[char] = freq
 ```
 
 ---
