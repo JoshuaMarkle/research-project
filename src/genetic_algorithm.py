@@ -1,8 +1,6 @@
 import random
-
 import config
 from keyboard_layout import calculate_value, crossover, mutate_layout
-
 
 def optimize_keyboard_layout():
     random.seed()
@@ -11,9 +9,7 @@ def optimize_keyboard_layout():
     best_value = float("inf")
     best_keyboard = keyboards[0][:]
 
-    print(
-        f"Generation 0: Best Keyboard ({calculate_value(config.qwerty_layout)}): {''.join(config.qwerty_layout)}"
-    )
+    print(f"Generation 0: Best Keyboard ({calculate_value(config.qwerty_layout)}): {''.join(config.qwerty_layout)}")
 
     for generation in range(1, config.NUM_GENERATIONS + 1):
         for i in range(config.NUM_KEYBOARDS):
@@ -28,9 +24,7 @@ def optimize_keyboard_layout():
                 best_value = value
                 best_keyboard = keyboards[i][:]
 
-        print(
-            f"Generation {generation}, Best Keyboard ({best_value}): {''.join(best_keyboard)}"
-        )
+        print(f"Generation {generation}, Best Keyboard ({best_value}): {''.join(best_keyboard)}")
 
     print("\nFinal Best Keyboard Layout:")
     for i, key in enumerate(best_keyboard, 1):
