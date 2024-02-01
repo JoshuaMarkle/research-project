@@ -19,8 +19,10 @@ def optimization_loop():
         for i in range(config.NUM_KEYBOARDS):
             if i > 0:
                 # Pick a random parent to crossover with
-                parent_index = random.randint(0, config.NUM_KEYBOARDS - 1)
-                keyboards[i] = crossover(best_keyboard, keyboards[parent_index])
+                rand_index = i
+                while rand_index == i:
+                    rand_index = random.randint(0, config.NUM_KEYBOARDS - 1)
+                keyboards[i] = crossover(best_keyboard, keyboards[rand_index])
                 keyboards[i] = mutate_layout(keyboards[i])
 
             # Calculate the keyboard value and check if it is the new best

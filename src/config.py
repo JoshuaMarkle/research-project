@@ -4,8 +4,8 @@ import json
 KEY_COUNT = 30
 NUM_KEYBOARDS = 100
 NUM_GENERATIONS = 100
-MAX_MUTATIONS = 100
-MAX_CROSSOVER_CYCLES = 5
+MAX_MUTATIONS = 1
+MAX_CROSSOVER_CYCLES = 30
 
 # Default layouts
 qwerty_layout = list("qwertyuiopasdfghjkl;zxcvbnm,./")

@@ -23,6 +23,7 @@ def crossover(parent1, parent2):
     child = [None] * len(parent1)
 
     def perform_cycle(start_index, source_parent, target_parent):
+        print("cycle")
         current_index = start_index
         cycle_length = 0
         while cycle_length < config.MAX_CROSSOVER_CYCLES:
@@ -33,6 +34,16 @@ def crossover(parent1, parent2):
             # Find the next key in the target parent that matches the current key in the source parent
             next_key = source_parent[current_index]
             next_index = target_parent.index(next_key)
+
+            print(source_parent[current_index])
+
+            # Print the keyboard
+            # for i in child:
+            #     if i != None:
+            #         print(i,end="")
+            #     else:
+            #         print("■",end="")
+            # print()
 
             cycle_length += 1
 
@@ -55,5 +66,9 @@ def crossover(parent1, parent2):
 
         # Remove the filled positions from the set of unfilled indices
         unfilled_indices = {i for i in unfilled_indices if child[i] is None}
+
+    # Post check???? What??
+    print(child)
+    print(set(child))
 
     return child
