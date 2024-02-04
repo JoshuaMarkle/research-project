@@ -29,8 +29,8 @@
   - 10 January 2024 - Adding Key Effort Into The Calculation
   - 17 January 2024 - Genetic Crossover Implementation
   - 31 January 2024 - Converting The Codebase to Python
-
-## Time Sheet
+  - 2 Febuary 2024 - Implementing A Crossover Algorithm 
+  - 3 Febuary 2024 - Creating A Crossover Algorithm 
 
 | Date             | Title                                   | Time Taken |
 | ---------------- | --------------------------------------- | ---------- |
@@ -58,7 +58,9 @@
 | 10 January 2024  | Adding Key Efforts Into The Calculation | 1h         |
 | 17 January 2024  | Genetic Crossover Implementation        | 1h         |
 | 31 January 2024  | Coverting The Codebase to Python        | 4h 10m     |
-| Total            |                                         | 40h        |
+| 2 Febuary 2024   | Implementing A Crossover Algorithm      | 2h 30m     |
+| 3 Febuary 2024   | Creating A Crossover Algorithm          | 5h 30m     |
+| Total            |                                         | 48h        |
 
 ---
 
@@ -1018,5 +1020,196 @@ def load_frequencies(file_path):
             freq = float(parts[-1])  # Frequency is the last part
             frequencies[char] = freq
 ```
+
+---
+
+## Title: Implementing A Crossover Algorithm 
+
+### Date: 2 Febuary 2024
+
+**Objective**: Implement the crossover algorithm found in the research of Keren Nivasch and Amos Azaria (2021)
+
+In order for the genetic algorithm to work the best, it is important to have a good way of merging good genetics. The goal is to merge the positive qualities of two good keyboards to make an even better keyboard. Having a good crossover algorithm will greatly decrease the amount of computation power and time because the only other alternative is guess and check through mutations. Crossover is like an educated guess of an even better keyboard.
+
+The main research paper that I am following has a cyclic algorithm that performs crossover: 
+
+1. Given two keyboards, randomly select a starting key (k1) from keyboard 1 (K1)
+2. Look at the starting key's position and then map it onto keyboard 2 (K2) to find a new key (k2)
+3. Place k1 onto the new child keyboard
+4. Find k2's letter position on K1 and then start from that key
+5. Restart at step 2
+6. If the new starting key has already been placed on the child keyboard, randomly select a new key from the unfilled slots on the child keyboard
+7. Repeat the cycles until the child keyboard is filled
+
+**The final implementation**
+
+```python
+# Merge two keyboard layouts using a cyclic algorithm
+def crossover(parent1, parent2):
+    # Initialize the child layout
+    child = [None] * len(parent1)
+
+    def perform_cycle(start_index, source_parent, target_parent):
+        print("cycle")
+        current_index = start_index
+        cycle_length = 0
+        while cycle_length < config.MAX_CROSSOVER_CYCLES:
+            # Copy the key from the source parent to the child
+            if child[current_index] is None:
+                child[current_index] = source_parent[current_index]
+            
+            # Find the next key in the target parent that matches the current key in the source parent
+            next_key = source_parent[current_index]
+            next_index = target_parent.index(next_key)
+
+            cycle_length += 1
+
+            # If the cycle is complete or the next key position is already filled, break
+            if next_index == start_index or child[next_index] is not None:
+                break
+            else:
+                current_index = next_index
+
+    unfilled_indices = set(range(len(parent1)))  # Use a set for faster removals
+    while unfilled_indices:
+        # Select a random start index from the unfilled positions
+        start_index = random.choice(list(unfilled_indices))
+
+        # Alternately choose parents to start from for each new cycle
+        if len(unfilled_indices) % 2 == 0:
+            perform_cycle(start_index, parent1, parent2)
+        else:
+            perform_cycle(start_index, parent2, parent1)
+
+        # Remove the filled positions from the set of unfilled indices
+        unfilled_indices = {i for i in unfilled_indices if child[i] is None}
+
+    return child
+```
+
+In order to know if this algorithm actually works, a small testing program was created that output the two parent keyboards and then the resulting child keyboard:
+
+```python
+from keyboard import crossover
+
+NEW_LAYOUTS = 1 
+
+# Define color codes
+BLUE = '\033[94m'
+RED = '\033[91m'
+YELLOW = '\033[93m'
+ENDC = '\033[0m'  # End color
+
+# Reference layouts
+qwerty_layout = "qwertyuiopasdfghjkl;zxcvbnm,.'"
+dvorak_layout = "',.pyfgcrlaoeuidhtns;qjkxbmwvz"
+
+# Print qwerty and dvorak layouts with colors
+print("QWERTY Layout:          DVORAK Layout:")
+for i in range(3):
+    for k in range(10):
+        print(BLUE + qwerty_layout[i * 10 + k] + ENDC, end=" ")
+    print("    ", end="")  # Space between layouts
+    for k in range(10):
+        print(RED + dvorak_layout[i * 10 + k] + ENDC, end=" ")
+    print()
+
+# Generate and print NEW_LAYOUTS new layouts with colors
+new_layout = crossover(qwerty_layout, dvorak_layout)  # Generate new layout
+for layout_number in range(NEW_LAYOUTS):
+    print(f"\nNew Layout {layout_number + 1}:")
+    for i, key in enumerate(new_layout, start=1):
+        if key == qwerty_layout[i-1] and key == dvorak_layout[i-1]:
+            print(YELLOW + key + ENDC, end=" ")
+        elif key == qwerty_layout[i - 1]:
+            print(BLUE + key + ENDC, end=" ")
+        elif key == dvorak_layout[i - 1]:
+            print(RED + key + ENDC, end=" ")
+        else:
+            print(key, end=" ")  # White by default
+        if i % 10 == 0:
+            print()  # Newline every 10 characters
+
+# Test duplication
+for i in range(NEW_LAYOUTS):
+    print("", "".join(sorted(set(new_layout))), "".join(sorted(new_layout)), sep="\n")
+
+```
+
+Ultimately, this did not work. The final child keyboard just became keyboard 1, taking nothing from keyboard 2. And when it did take something from keyboard 2, there would be duplicate key placements and then the child keyboard was ruined. A new algorithm will have to be used in the future.
+
+---
+
+## Title: Creating A Crossover Algorithm
+
+### Date: 3 Febuary 2024
+
+**Objective**: Design a new algorithm that actually works without worrying about performance.
+
+Last entry (Feb 2), the implementation of an existing algorithm did not work. It seems like the core algorithm is flawed and it is unclear how the previous researchers got it to work. For now, the goal is to get something working. It is better to have a badly designed working product than a perfectly designed unfinished product. Optimization can be the focus for later, now, it is important to get something working.
+
+The current idea is to map out all possibilities for each key. This is about 30 yes/no choices that need to be made, either take from parent keyboard 1 or parent keyboard 2. The algorithm will work like the physics concept of a wave function collapse where one decision or outcome will collape the outcomes of the other choices. 
+
+The algorthim is like a suduko puzzle that starts with no numbers. First it stores all possible solutions, randomly chose one key from parent 1 to put onto the child keyboard. From there, get the position of the other possible key in that location from parent 2. Because that key only occurs twice within all of the possibilities, the other possibility location is found and then the process is repeated. This way, a new keyboard is created that is a perfect mix between the two parent keyboards.
+
+**Intermediate implementation:**
+
+```python
+def crossover(parent1, parent2):
+    child = [None] * len(parent1)
+    possibilities = [[parent1[i], parent2[i]] for i in range(len(parent1))]
+    positions = list(range(len(parent1)))
+
+    while positions:
+        # Choose a random unfilled position
+        possibility_index = random.choice(positions)
+        
+        # Ensure we are not choosing from an empty list
+        if not possibilities[possibility_index]:
+            positions.remove(possibility_index)
+            continue
+
+        # If only one possibility left, use it; otherwise, choose randomly
+        if len(possibilities[possibility_index]) == 1:
+            chosen_key = possibilities[possibility_index][0]
+        else:
+            chosen_key = random.choice(possibilities[possibility_index])
+
+        # Place chosen key in child layout
+        child[possibility_index] = chosen_key
+        positions.remove(possibility_index)  # Remove this position from further consideration
+
+        # Remove chosen key from all other possibilities to avoid duplicates
+        for pos in possibilities:
+            if chosen_key in pos:
+                pos.remove(chosen_key)
+
+        # If a possibility list becomes empty, fix the remaining character in the child layout
+        for i, pos in enumerate(possibilities):
+            if len(pos) == 1 and child[i] is None:
+                child[i] = pos[0]
+                if i in positions:
+                    positions.remove(i)
+
+    return ''.join(child)
+```
+
+After updating the testing program, it is clear that this algorthim is good. It is really close to working. There are a few duplicate keys that occur that need to be filtered out.
+
+**Sample Output**
+
+```
+QWERTY Layout:          DVORAK Layout:
+q w e r t y u i o p     ' , . p y f g c r l
+a s d f g h j k l ;     a o e u i d h t n s
+z x c v b n m , . '     ; q j k x b m w v z
+
+New Layout
+q w e r y f g c o l
+a o d u i d h k n ;
+z x c v x b m , v '
+```
+
+The `c`, `d`, `o`, `v`, and `x` keys are repeated twice. It is not clear why yet but that is a future problem.
 
 ---
