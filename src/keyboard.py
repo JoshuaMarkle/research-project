@@ -17,58 +17,40 @@ def mutate_layout(layout):
         layout[index1], layout[index2] = layout[index2], layout[index1]
     return layout
 
-# Merge two keyboard layouts using a cyclic algorithm
 def crossover(parent1, parent2):
-    # Initialize the child layout
     child = [None] * len(parent1)
+    possibilities = [[parent1[i], parent2[i]] for i in range(len(parent1))]
+    positions = list(range(len(parent1)))
 
-    def perform_cycle(start_index, source_parent, target_parent):
-        print("cycle")
-        current_index = start_index
-        cycle_length = 0
-        while cycle_length < config.MAX_CROSSOVER_CYCLES:
-            # Copy the key from the source parent to the child
-            if child[current_index] is None:
-                child[current_index] = source_parent[current_index]
-            
-            # Find the next key in the target parent that matches the current key in the source parent
-            next_key = source_parent[current_index]
-            next_index = target_parent.index(next_key)
+    while positions:
+        # Choose a random unfilled position
+        possibility_index = random.choice(positions)
+        
+        # Ensure we are not choosing from an empty list
+        if not possibilities[possibility_index]:
+            positions.remove(possibility_index)
+            continue
 
-            print(source_parent[current_index])
-
-            # Print the keyboard
-            # for i in child:
-            #     if i != None:
-            #         print(i,end="")
-            #     else:
-            #         print("■",end="")
-            # print()
-
-            cycle_length += 1
-
-            # If the cycle is complete or the next key position is already filled, break
-            if next_index == start_index or child[next_index] is not None:
-                break
-            else:
-                current_index = next_index
-
-    unfilled_indices = set(range(len(parent1)))  # Use a set for faster removals
-    while unfilled_indices:
-        # Select a random start index from the unfilled positions
-        start_index = random.choice(list(unfilled_indices))
-
-        # Alternately choose parents to start from for each new cycle
-        if len(unfilled_indices) % 2 == 0:
-            perform_cycle(start_index, parent1, parent2)
+        # If only one possibility left, use it; otherwise, choose randomly
+        if len(possibilities[possibility_index]) == 1:
+            chosen_key = possibilities[possibility_index][0]
         else:
-            perform_cycle(start_index, parent2, parent1)
+            chosen_key = random.choice(possibilities[possibility_index])
 
-        # Remove the filled positions from the set of unfilled indices
-        unfilled_indices = {i for i in unfilled_indices if child[i] is None}
+        # Place chosen key in child layout
+        child[possibility_index] = chosen_key
+        positions.remove(possibility_index)  # Remove this position from further consideration
 
-    # Post check???? What??
-    print(child)
-    print(set(child))
+        # Remove chosen key from all other possibilities to avoid duplicates
+        for pos in possibilities:
+            if chosen_key in pos:
+                pos.remove(chosen_key)
 
-    return child
+        # If a possibility list becomes empty, fix the remaining character in the child layout
+        for i, pos in enumerate(possibilities):
+            if len(pos) == 1 and child[i] is None:
+                child[i] = pos[0]
+                if i in positions:
+                    positions.remove(i)
+
+    return ''.join(child)

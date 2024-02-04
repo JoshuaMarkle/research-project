@@ -1,15 +1,19 @@
+import random
 import json
 
 # Constants
 KEY_COUNT = 30
 NUM_KEYBOARDS = 100
-NUM_GENERATIONS = 100
+NUM_GENERATIONS = 1000
 MAX_MUTATIONS = 1
-MAX_CROSSOVER_CYCLES = 30
 
 # Default layouts
-qwerty_layout = list("qwertyuiopasdfghjkl;zxcvbnm,./")
-dvorak_layout = list("',.pyfgcrlaoeuidhtns;qjkxbmwvz")
+qwerty = list("qwertyuiopasdfghjkl;zxcvbnm,./")
+dvorak = list("',.pyfgcrlaoeuidhtns;qjkxbmwvz")
+abcs = "abcdefghijklmnopqrstuvwxyz;',."
+
+def random_layout():
+    return "".join(random.sample(abcs, len(abcs)))
 
 def load_frequencies(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -29,4 +33,4 @@ layers, key_distances, key_efforts = load_keyboard_characteristics("../data/keyb
 frequencies = load_frequencies("../data/english.json")
 
 # Set the initial keyboard layout
-starting_layout = list(layers[0])
+starting = list(layers[0])

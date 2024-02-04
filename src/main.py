@@ -1,17 +1,15 @@
 import random
 import config
-from keyboard import calculate_value, crossover, mutate_layout
+from keyboard import calculate_value, crossover
 
 def optimization_loop():
     random.seed()
 
     # Initilization
-    keyboards = [config.starting_layout[:] for _ in range(config.NUM_KEYBOARDS)]
+    keyboards = [config.random_layout()[:] for _ in range(config.NUM_KEYBOARDS)]
     best_value = float("inf")
     best_keyboard = keyboards[0][:]
     prev_best_keyboard = keyboards[0][:]
-
-    print(f"Generation 0 ({calculate_value(config.starting_layout):.2f}): {''.join(config.starting_layout)}")
 
     # The main loop
     for generation in range(1, config.NUM_GENERATIONS + 1):
@@ -23,7 +21,7 @@ def optimization_loop():
                 while rand_index == i:
                     rand_index = random.randint(0, config.NUM_KEYBOARDS - 1)
                 keyboards[i] = crossover(best_keyboard, keyboards[rand_index])
-                keyboards[i] = mutate_layout(keyboards[i])
+                # keyboards[i] = mutate_layout(keyboards[i])
 
             # Calculate the keyboard value and check if it is the new best
             value = calculate_value(keyboards[i])
