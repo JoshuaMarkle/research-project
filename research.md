@@ -31,6 +31,7 @@
   - 31 January 2024 - Converting The Codebase to Python
   - 2 Febuary 2024 - Implementing A Crossover Algorithm 
   - 3 Febuary 2024 - Creating A Crossover Algorithm 
+  - 4 Febuary 2024 - Completing The Crossover Algorithm
 
 | Date             | Title                                   | Time Taken |
 | ---------------- | --------------------------------------- | ---------- |
@@ -59,8 +60,8 @@
 | 17 January 2024  | Genetic Crossover Implementation        | 1h         |
 | 31 January 2024  | Coverting The Codebase to Python        | 4h 10m     |
 | 2 Febuary 2024   | Implementing A Crossover Algorithm      | 2h 30m     |
-| 3 Febuary 2024   | Creating A Crossover Algorithm          | 5h 30m     |
-| Total            |                                         | 48h        |
+| 3 Febuary 2024   | Completing The Crossover Algorithm      | 3h         |
+| Total            |                                         | 46h        |
 
 ---
 
@@ -1211,5 +1212,150 @@ z x c v x b m , v '
 ```
 
 The `c`, `d`, `o`, `v`, and `x` keys are repeated twice. It is not clear why yet but that is a future problem.
+
+---
+
+## Title: Completing The Crossover Algorithm
+
+### Date: 4 Febuary 2024
+
+**Objective**: Complete the crossover algorithm and fix the duplication errors
+
+As a continuation of the previous entry, this session was focused on fixing the crossover algorithm and the small bugs.
+
+It turns out that this method is good at only finding semi good solutions, not perfect solutions. By adding another check to the generation process of the child if that key has already been placed, the final keyboard produced will meet the requirements on inhereting from only both parent keyboards but there will be a few blank spaces. The amount of unfillable spaces is realatively small so most of the keyboard will always be filled.
+
+The new crossover algorithm treats these unfillable spaces as mutations in the keyboard. It first creates a list of of the keys that are left avaliable. It then iterates through the keys on the child keyboard and if there is a blank space, it will place on of the unplaced keys. This newly placed key will not correspond with either of the parents but is like a random mutation between the merging of the two parent keyboards. Eventually all of the unfilled spaces will be filled randomly and the child keyboard can be returned.
+
+**Final function:**
+
+```python
+def crossover(parent1, parent2):
+    child = [None] * len(parent1)
+    possibilities = [[parent1[i], parent2[i]] for i in range(len(parent1))]
+    positions = set(range(len(parent1)))
+    used = set()
+
+    while positions:
+        possibility_index = random.choice(list(positions))
+        positions.remove(possibility_index)
+
+        # Filter possibilities to remove already used characters
+        possibilities[possibility_index] = [p for p in possibilities[possibility_index] if p not in used]
+
+        # If no possibilities left, continue to next iteration
+        if not possibilities[possibility_index]:
+            continue
+
+        # If only one possibility left, use it; otherwise, choose randomly
+        if len(possibilities[possibility_index]) == 1:
+            chosen_key = possibilities[possibility_index][0]
+        else:
+            chosen_key = random.choice(possibilities[possibility_index])
+
+        # Place chosen key in child layout and mark as used
+        child[possibility_index] = chosen_key
+        used.add(chosen_key)
+
+    # Create a list of unused characters
+    all_chars = set(parent1 + parent2)
+    unused_chars = list(all_chars - used)
+
+    # Shuffle the list of unused characters to introduce randomness
+    random.shuffle(unused_chars)
+
+    # Fill in any None values in child with unused characters
+    for i, char in enumerate(child):
+        if char is None:
+            # Pop an unused character from the list and place it in the child
+            child[i] = unused_chars.pop()
+
+    # Ensure all unused characters are used
+    if unused_chars:
+        raise ValueError("Not all characters were used, which indicates a logic error.")
+
+    return ''.join(child)
+```
+
+Overall, this new algorithm works and even has an unintentially created extra feature for mutatations. This will work for the present moment research but will probably need to be optimized later into the project as it probably is not the best solution possible.
+
+Another new part of the project is a new testing system. It is important to make sure that certain sections are working and to have a way to test each of those sections. For the development of this crossover algorithm, it was testing with a simple script to output the two parents, each keyboard after every iteration, final keyboard layout, and any final duplicate characters. 
+
+The project now has a new directory called tests where all future testing scripts will reside.
+
+**Testing Script For Crossover:**
+
+```python
+import sys
+sys.path.append('../src')
+
+from keyboard import crossover
+
+NEW_LAYOUTS = 1 
+
+# Define color codes
+BLUE = '\033[94m'
+RED = '\033[91m'
+YELLOW = '\033[93m'
+ENDC = '\033[0m'  # End color
+
+# Reference layouts
+qwerty_layout = "qwertyuiopasdfghjkl;zxcvbnm,.'"
+dvorak_layout = "',.pyfgcrlaoeuidhtns;qjkxbmwvz"
+
+# Print qwerty and dvorak layouts with colors
+print("QWERTY Layout:          DVORAK Layout:")
+for i in range(3):
+    for k in range(10):
+        print(BLUE + qwerty_layout[i * 10 + k] + ENDC, end=" ")
+    print("    ", end="")  # Space between layouts
+    for k in range(10):
+        print(RED + dvorak_layout[i * 10 + k] + ENDC, end=" ")
+    print()
+
+# Generate and print NEW_LAYOUTS new layouts with colors
+new_layout = crossover(qwerty_layout, dvorak_layout)  # Generate new layout
+
+# Print the new layout
+for layout_number in range(NEW_LAYOUTS):
+    print(f"\nNew Layout {layout_number + 1}:")
+    for i, key in enumerate(new_layout, start=1):
+        if key == qwerty_layout[i-1] and key == dvorak_layout[i-1]:
+            print(YELLOW + key + ENDC, end=" ")
+        elif key == qwerty_layout[i - 1]:
+            print(BLUE + key + ENDC, end=" ")
+        elif key == dvorak_layout[i - 1]:
+            print(RED + key + ENDC, end=" ")
+        else:
+            print(key, end=" ")
+        if i % 10 == 0:
+            print()
+    
+    # Test for duplication
+    print()
+    print("Sorted Set: ", "".join(sorted(set(new_layout))), "\nSorted Child: ", "".join(sorted(new_layout)), sep="")
+    print()
+```
+
+*The color codes are for bash output; visuallizing what keys are inhereted from which parent keyboard*
+
+There is also the possibility to test on a large quantity of keyboards at once.
+
+**Sample Testing Output**
+
+```
+QWERTY Layout:          DVORAK Layout:
+q w e r t y u i o p     ' , . p y f g c r l
+a s d f g h j k l ;     a o e u i d h t n s
+z x c v b n m , . '     ; q j k x b m w v z
+
+New Layout 1:
+' , e q t y g i r p
+a s d u f h j k l ;
+z x c v b n m w . o
+
+Sorted Set: ',.;abcdefghijklmnopqrstuvwxyz
+Sorted Child: ',.;abcdefghijklmnopqrstuvwxyz
+```
 
 ---
