@@ -4,7 +4,7 @@ import json
 # Constants
 KEY_COUNT = 30
 NUM_KEYBOARDS = 1000
-NUM_GENERATIONS = 100
+NUM_GENERATIONS = 10
 MAX_MUTATIONS = 1
 
 # Default layouts

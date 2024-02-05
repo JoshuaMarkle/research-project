@@ -31,9 +31,9 @@ def optimization_loop():
                 best_keyboard = keyboards[i][:]
             
         # Print that generation only if the best keyboard has changed
-        if prev_best_keyboard != best_keyboard:
-            print(f"Generation {generation} ({best_value:.2f}): {''.join(best_keyboard)}")
-            prev_best_keyboard = best_keyboard
+        # if prev_best_keyboard != best_keyboard:
+        #     print(f"Generation {generation} ({best_value:.2f}): {''.join(best_keyboard)}")
+        #     prev_best_keyboard = best_keyboard
 
     # Print the best keyboard created
     print("\nFinal Best Keyboard Layout:")
