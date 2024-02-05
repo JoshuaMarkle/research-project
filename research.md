@@ -1358,4 +1358,64 @@ Sorted Set: ',.;abcdefghijklmnopqrstuvwxyz
 Sorted Child: ',.;abcdefghijklmnopqrstuvwxyz
 ```
 
+As for the final results, this new form of crossover has sped up the results dramatically. After messing around with the model tuning, it appears as if adding any more mutations will actually slow down the process exponentially. This shows that in the future, the crossover algorithm should be perfect and would be better if it did not force any mutations.
+
+**Sample Program Output**
+
+```
+Generation 1 (719.90): lp.gm'dsv,nrthw;oaiebczqjfxyuk
+Generation 2 (686.25): gucdk;mplynothwrsaieb'x.zfqj,v
+Generation 3 (684.86): lucdx;mpfynhsowrtaiev'k.zgqj,b
+Generation 4 (680.66): lwcmxqdpfynortuhiasev'.,zg;jkb
+Generation 5 (679.85): lwcmxzdgfynortuhsiaev'.,qp;jkb
+Generation 7 (679.80): lwcm;zdgfynortuhsiaev'.,qpxjkb
+Generation 9 (678.52): uwcm;zdgfynortlhsiaev'.,qxpjkb
+
+Final Best Keyboard Layout:
+[u][w][c][m][;][z][d][g][f][y]
+[n][o][r][t][l][h][s][i][a][e]
+[v]['][.][,][q][x][p][j][k][b]
+```
+
+After running the codebase multiple times, it **always** gets stuck on a keyboard with a value of *678.52*. It is not clear why this is happening. No matter what starting keyboards (even randomly generated keyboards), the keyboard score always converges onto this one value, even though the final keyboard is different. This problem is going to be the next thing to do in this research.
+
+**More Outputs Displaying Strange Error**
+
+```
+Generation 1 (714.97): lpcujdkmbwaethrysoni',qf;xg.zv
+Generation 2 (684.45): lcpuj;fmbyiethrdsona.'qxzkgw,v
+Generation 3 (681.45): dc.uj;ymgwteahrlsonifkqxz'bp,v
+Generation 4 (680.77): dcfujqymgwteahrlsoni,k;bz'xp.v
+Generation 5 (680.77): gcfuxqymdwteahrlsoni;,kbzpj'.v
+Generation 6 (680.68): dcgu;zymfwaethrlsoni',kbqpxj.v
+Generation 7 (678.52): dcgu;zymfwietrhlsonaj,pbq'xk.v
+
+Final Best Keyboard Layout:
+[d][c][g][u][;][z][y][m][f][w]
+[i][e][t][r][h][l][s][o][n][a]
+[j][,][p][b][q]['][x][k][.][v]
+```
+
+**Another Output**
+
+```
+Generation 1 (719.94): u'cmq;w,khioetgynlasrf.pxzvdbj
+Generation 2 (684.12): dvwm;quflkioeshyntarc,.px'bgzj
+Generation 3 (680.42): cdwm;qgflytoenhusiarb,.px'vkzj
+Generation 4 (678.94): cdwm;xgfuytoenhlsiarb'.pq,vkzj
+Generation 5 (678.94): dcwm;xgfuytoenhlsiarb'.pq,vkzj
+Generation 6 (678.73): dcwmx;gfuytoenhlsiarb'.pq,vkzj
+Generation 7 (678.57): dcwmxzgfuytoenhlaisrb'.pq,vk;j
+Generation 8 (678.52): dcwm;zgfuytoeshlainrb'.pq,vkxj
+
+Final Best Keyboard Layout:
+[d][c][w][m][;][z][g][f][u][y]
+[t][o][e][s][h][l][a][i][n][r]
+[b]['][.][p][q][,][v][k][x][j]
+```
+
+*It is important to note that this software is running a total of 1000 generations, there is just no improvement*
+
+This could probably be because the genetic algorithm is perfect this is actually the best layout. This means that all of the 30 keys have converged onto their ideal position. There are probably multiple ideal positions because of the different final outputs and same final keyboard value. This is a possibility but is it also possible that this genetic algorithm gets stuck on a local minimum and unable to escape to find an even better solution. Everything will have to undergo further testing in the future.
+
 ---

@@ -12,10 +12,11 @@ def calculate_value(layout):
 
 # Switch two random keys
 def mutate_layout(layout):
+    layout = list(layout)
     for _ in range(random.randint(1, config.MAX_MUTATIONS)):
         index1, index2 = random.sample(range(len(layout)), 2)
         layout[index1], layout[index2] = layout[index2], layout[index1]
-    return layout
+    return "".join(layout)
 
 def crossover(parent1, parent2):
     child = [None] * len(parent1)
