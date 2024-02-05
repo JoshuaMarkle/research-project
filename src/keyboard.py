@@ -20,15 +20,18 @@ def mutate_layout(layout):
 def crossover(parent1, parent2):
     child = [None] * len(parent1)
     possibilities = [[parent1[i], parent2[i]] for i in range(len(parent1))]
-    positions = list(range(len(parent1)))
+    positions = set(range(len(parent1)))
+    used = set()
 
     while positions:
-        # Choose a random unfilled position
-        possibility_index = random.choice(positions)
-        
-        # Ensure we are not choosing from an empty list
+        possibility_index = random.choice(list(positions))
+        positions.remove(possibility_index)
+
+        # Filter possibilities to remove already used characters
+        possibilities[possibility_index] = [p for p in possibilities[possibility_index] if p not in used]
+
+        # If no possibilities left, continue to next iteration
         if not possibilities[possibility_index]:
-            positions.remove(possibility_index)
             continue
 
         # If only one possibility left, use it; otherwise, choose randomly
@@ -37,20 +40,25 @@ def crossover(parent1, parent2):
         else:
             chosen_key = random.choice(possibilities[possibility_index])
 
-        # Place chosen key in child layout
+        # Place chosen key in child layout and mark as used
         child[possibility_index] = chosen_key
-        positions.remove(possibility_index)  # Remove this position from further consideration
+        used.add(chosen_key)
 
-        # Remove chosen key from all other possibilities to avoid duplicates
-        for pos in possibilities:
-            if chosen_key in pos:
-                pos.remove(chosen_key)
+    # Create a list of unused characters
+    all_chars = set(parent1 + parent2)
+    unused_chars = list(all_chars - used)
 
-        # If a possibility list becomes empty, fix the remaining character in the child layout
-        for i, pos in enumerate(possibilities):
-            if len(pos) == 1 and child[i] is None:
-                child[i] = pos[0]
-                if i in positions:
-                    positions.remove(i)
+    # Shuffle the list of unused characters to introduce randomness
+    random.shuffle(unused_chars)
+
+    # Fill in any None values in child with unused characters
+    for i, char in enumerate(child):
+        if char is None:
+            # Pop an unused character from the list and place it in the child
+            child[i] = unused_chars.pop()
+
+    # Ensure all unused characters are used
+    if unused_chars:
+        raise ValueError("Not all characters were used, which indicates a logic error.")
 
     return ''.join(child)

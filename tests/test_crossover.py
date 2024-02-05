@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../src')
+
 from keyboard import crossover
 
 NEW_LAYOUTS = 1 
@@ -24,6 +27,8 @@ for i in range(3):
 
 # Generate and print NEW_LAYOUTS new layouts with colors
 new_layout = crossover(qwerty_layout, dvorak_layout)  # Generate new layout
+
+# Print the new layout
 for layout_number in range(NEW_LAYOUTS):
     print(f"\nNew Layout {layout_number + 1}:")
     for i, key in enumerate(new_layout, start=1):
@@ -37,8 +42,8 @@ for layout_number in range(NEW_LAYOUTS):
             print(key, end=" ")  # White by default
         if i % 10 == 0:
             print()  # Newline every 10 characters
-
-# Test duplication
-for i in range(NEW_LAYOUTS):
-    print("", "".join(sorted(set(new_layout))), "".join(sorted(new_layout)), sep="\n")
-
+    
+    # Test for duplication
+    print()
+    print("Sorted Set: ", "".join(sorted(set(new_layout))), "\nSorted Child: ", "".join(sorted(new_layout)), sep="")
+    print()
