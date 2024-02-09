@@ -3,7 +3,7 @@
 		"layers": [
 			"abcdefghijklmnopqrstuvwxyz'.,;",
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"<>:",
-			"-=[]\\/`~!@#$%^&*()_+{}|?______"
+			"-=[]\\/`~!@#$%^&*()_+{}|?~~~~~~"
 		],
         "key_distances": [
             11, 11, 11, 11, 13, 17, 11, 11, 11, 11, 

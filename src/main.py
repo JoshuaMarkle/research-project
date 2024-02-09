@@ -6,8 +6,9 @@ def optimization_loop():
     random.seed()
 
     # Initilization
-    keyboards = [config.random_layout()[:] for _ in range(config.NUM_KEYBOARDS)]
+    # keyboards = [config.random_layout()[:] for _ in range(config.NUM_KEYBOARDS)]
     # keyboards = ["".join(config.dvorak)[:] for _ in range(config.NUM_KEYBOARDS)]
+    keyboards = ["".join(config.starting)[:] for _ in range(config.NUM_KEYBOARDS)]
     best_value = float("inf")
     best_keyboard = keyboards[0][:]
     prev_best_keyboard = keyboards[0][:]
