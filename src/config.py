@@ -4,7 +4,7 @@ import json
 # Constants
 KEY_COUNT = 30
 NUM_KEYBOARDS = 100
-NUM_GENERATIONS = 300
+NUM_GENERATIONS = 50
 MAX_MUTATIONS = 1
 
 # Weights
