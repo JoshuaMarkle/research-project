@@ -1,6 +1,7 @@
 import random
 import config
-from keyboard import calculate_value, crossover, mutate_layout
+from keyboard import crossover, mutate_layout
+from value import calculate_value
 
 def optimization_loop():
     random.seed()
@@ -9,7 +10,7 @@ def optimization_loop():
     # keyboards = [config.random_layout()[:] for _ in range(config.NUM_KEYBOARDS)]
     # keyboards = ["".join(config.dvorak)[:] for _ in range(config.NUM_KEYBOARDS)]
     keyboards = ["".join(config.starting)[:] for _ in range(config.NUM_KEYBOARDS)]
-    best_value = float("inf")
+    best_value = -float("inf")
     best_keyboard = keyboards[0][:]
     prev_best_keyboard = keyboards[0][:]
 
@@ -25,12 +26,12 @@ def optimization_loop():
                 keyboards[i] = crossover(best_keyboard, keyboards[rand_index])
                 keyboards[i] = mutate_layout(keyboards[i])
 
-            # Calculate the keyboard value and check if it is the new best
-            value = calculate_value(keyboards[i])
-            if value < best_value:
+            # Calculate the keyboard value or check if it is the new best
+            value = -calculate_value(keyboards[i])
+            if value > best_value:
                 best_value = value
                 best_keyboard = keyboards[i][:]
-            
+
         # Print that generation only if the best keyboard has changed
         if prev_best_keyboard != best_keyboard:
             print(f"Generation {generation} ({best_value:.2f}): {''.join(best_keyboard)}")

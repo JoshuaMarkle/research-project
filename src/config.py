@@ -31,8 +31,9 @@ def load_keyboard_characteristics(file_path, keyboard_type):
         layers = data[keyboard_type]["layers"]
         key_distances = data[keyboard_type]["key_distances"]
         key_efforts = data[keyboard_type]["key_efforts"]
+        key_fingers = data[keyboard_type]["key_fingers"]
         key_directions = data[keyboard_type].get("key_directions", [])
-    return layers, key_distances, key_efforts, key_directions
+    return layers, key_distances, key_fingers, key_efforts, key_directions
 
 def load_corpus_characteristics(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -45,7 +46,7 @@ def load_corpus_characteristics(file_path):
     return character_frequencies, bigram_frequencies, trigram_frequencies
 
 # Load from data files
-layers, key_distances, key_efforts, key_directions = load_keyboard_characteristics("../data/keyboard.json", "corne")
+layers, key_distances, key_efforts, key_fingers, key_directions = load_keyboard_characteristics("../data/keyboard.json", "standard")
 frequencies, bigrams, trigrams = load_corpus_characteristics("../data/english.json")
 
 # Set the initial keyboard layout
