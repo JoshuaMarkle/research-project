@@ -1,6 +1,10 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout
 from PyQt5.QtCore import Qt
-from ui_components import Sidebar, DesignScene, DesignView
+from ui_components import DesignScene, DesignView
+from sidebar import Sidebar
+
+# User
+# I want to write a python gui that allows the user to create their own physical keyboard. I want to make it so the user can create keys, delete keys, change key characteristics (position, finger number, difficulty, and more), move around the keys on a grid. I want all of this to happen on the right side of the screen. On the left side of the screen, I want a small interactive sidebar that has a bunch of settings adjusters and nice things. For example it would have a toggler for difficulty that would then color all of the keys a shade of red based on the difficulty setting for that key. It would also have input for key size, grid size, import json, and export json. Do you understand this project
 
 class MainWindow(QMainWindow):
     def __init__(self):

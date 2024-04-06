@@ -1,44 +1,15 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit
-from PyQt5.QtGui import QPalette, QPainter, QBrush, QColor, QPen
-from PyQt5.QtCore import Qt, QRect, QPointF, QRectF, QPoint
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import * 
 
-from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGraphicsItem, QLabel, QVBoxLayout
-from PyQt5.QtGui import QWheelEvent, QMouseEvent
-
-GRID_SIZE = 50
-GRID_HEIGHT = GRID_SIZE * 100
-GRID_WIDTH = GRID_SIZE * 100
-
-class Sidebar(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
-
-    def initUI(self):
-        # Set the layout
-        layout = QVBoxLayout(self)
-        self.setLayout(layout)
-
-        # Set background color to light gray
-        palette = self.palette()
-        palette.setColor(QPalette.Background, QColor('#e0e0e0'))
-        self.setPalette(palette)
-        self.setAutoFillBackground(True)
-
-        label = QLabel('Settings', self)
-        layout.addWidget(label)
-
-        textbox = QLineEdit(self)
-        textbox.setPlaceholderText(str(GRID_SIZE))
-        layout.addWidget(textbox)
-
+import config
 
 class DesignScene(QGraphicsScene):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.gridSize = GRID_SIZE
+        self.gridSize = config.GRID_SIZE
         self.setBackgroundBrush(QColor(255, 255, 255))
-        self.setSceneRect(0, 0, GRID_WIDTH, GRID_HEIGHT)
+        self.setSceneRect(0, 0, config.GRID_WIDTH, config.GRID_HEIGHT)
 
         # Assuming you have set a scene rect somewhere
         centerX = self.width() / 2
@@ -52,6 +23,12 @@ class DesignScene(QGraphicsScene):
         self.addItem(key)
 
     def drawBackground(self, painter: QPainter, rect):
+        self.gridSize = config.GRID_SIZE
+        self.setSceneRect(0, 0, config.GRID_WIDTH, config.GRID_HEIGHT)
+
+        # Redraw the whole background (only here for dynamic GRID_SIZE)
+        self.setBackgroundBrush(QColor(255, 255, 255))
+
         # Call the base class method to ensure the scene's background is drawn
         super().drawBackground(painter, rect)
 
@@ -73,10 +50,11 @@ class DesignScene(QGraphicsScene):
 class DesignView(QGraphicsView):
     def __init__(self, scene, parent=None):
         super().__init__(scene, parent)
-        # self.setRenderHint(QPainter.Antialiasing)
-        # self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.setDragMode(QGraphicsView.NoDrag)
         self.lastPanPoint = QPoint()
+        self.minZoomLevel = 0.2
+        self.maxZoomLevel = 5.0
+        self.currentZoomLevel = 1.0
 
     def mousePressEvent(self, event):
         if event.button() == Qt.RightButton:
@@ -99,27 +77,30 @@ class DesignView(QGraphicsView):
             self.lastPanPoint = event.pos()
         super().mouseMoveEvent(event)
 
-    def wheelEvent(self, event: QWheelEvent):
+    def wheelEvent(self, event):
         zoomInFactor = 1.25
         zoomOutFactor = 1 / zoomInFactor
 
         # Save the scene pos
         oldPos = self.mapToScene(event.pos())
 
-        # Zoom
-        if event.angleDelta().y() > 0:
-            zoomFactor = zoomInFactor
-        else:
-            zoomFactor = zoomOutFactor
-        self.scale(zoomFactor, zoomFactor)
+        # Calculate the new zoom level
+        if event.angleDelta().y() > 0:  # Zoom in
+            newZoomLevel = self.currentZoomLevel * zoomInFactor
+        else:  # Zoom out
+            newZoomLevel = self.currentZoomLevel * zoomOutFactor
 
-        # Get the new position
-        newPos = self.mapToScene(event.pos())
+        # Apply zoom if it's above the minimum zoom level
+        if newZoomLevel >= self.minZoomLevel and newZoomLevel <= self.maxZoomLevel:
+            self.scale(zoomInFactor if event.angleDelta().y() > 0 else zoomOutFactor, zoomInFactor if event.angleDelta().y() > 0 else zoomOutFactor)
+            self.currentZoomLevel = newZoomLevel
 
-        # Move scene to old position
-        delta = newPos - oldPos
-        self.translate(delta.x(), delta.y())
+            # Get the new position
+            newPos = self.mapToScene(event.pos())
 
+            # Move scene to old position
+            delta = newPos - oldPos
+            self.translate(delta.x(), delta.y())
 
 class Key(QGraphicsItem):
     def __init__(self, letter, position, finger_number, difficulty, parent=None):
@@ -136,37 +117,42 @@ class Key(QGraphicsItem):
         return QRectF(0, 0, self.size, self.size)
 
     def paint(self, painter, option, widget=None):
-        # Set the pen for the border of the key
+        # Draw the base
         pen = QPen(QColor('black'), 2)
         painter.setPen(pen)
-        
-        # Set the brush for the inside of the key
         painter.setBrush(QColor('lightgrey'))
-        
-        # Draw the key as a rectangle
         painter.drawRect(self.boundingRect())
-        
-        # Draw the letter in the center of the key
-        painter.drawText(self.boundingRect(), Qt.AlignCenter, self.letter)
+
+        # Draw the top
+        pen = QPen(QColor('white'), 5)
+        topRect = QRectF(self.size * .2, self.size * .13, self.size * .6, self.size * .6)
+        painter.setPen(pen)
+        painter.setBrush(QColor('white'))
+        painter.drawRect(topRect)
+
+        # Draw the letter
+        pen = QPen(QColor('black'), 2)
+        painter.setPen(pen)
+        painter.drawText(topRect, Qt.AlignCenter, self.letter)
 
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange and self.scene():
             newPos = value.toPointF()
 
             # Snap the new position to the grid
-            newX = round(newPos.x() / GRID_SIZE) * GRID_SIZE
-            newY = round(newPos.y() / GRID_SIZE) * GRID_SIZE
+            newX = round(newPos.x() / config.GRID_SIZE) * config.GRID_SIZE
+            newY = round(newPos.y() / config.GRID_SIZE) * config.GRID_SIZE
 
             # Ensure the key doesn't leave the grid
             if newX < 0:
                 newX = 0
-            elif newX + self.size > GRID_WIDTH:
-                newX = GRID_WIDTH - self.size
+            elif newX + self.size > config.GRID_WIDTH:
+                newX = config.GRID_WIDTH - self.size
 
             if newY < 0:
                 newY = 0
-            elif newY + self.size > GRID_HEIGHT:
-                newY = GRID_HEIGHT - self.size
+            elif newY + self.size > config.GRID_HEIGHT:
+                newY = config.GRID_HEIGHT - self.size
 
             # Return the adjusted position
             return QPointF(newX, newY)
