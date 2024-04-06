@@ -109,7 +109,7 @@ class Key(QGraphicsItem):
         self.setPos(position)  # Position should be a QPointF
         self.finger_number = finger_number
         self.difficulty = difficulty
-        self.size = 40  # Key size
+        self.size = config.KEY_SIZE # Key size
         self.setFlags(QGraphicsItem.ItemIsMovable | QGraphicsItem.ItemIsSelectable)
 
     def boundingRect(self):
@@ -135,26 +135,9 @@ class Key(QGraphicsItem):
         painter.setPen(pen)
         painter.drawText(topRect, Qt.AlignCenter, self.letter)
 
-    def itemChange(self, change, value):
-        if change == QGraphicsItem.ItemPositionChange and self.scene():
-            newPos = value.toPointF()
-
-            # Snap the new position to the grid
-            newX = round(newPos.x() / config.GRID_SIZE) * config.GRID_SIZE
-            newY = round(newPos.y() / config.GRID_SIZE) * config.GRID_SIZE
-
-            # Ensure the key doesn't leave the grid
-            if newX < 0:
-                newX = 0
-            elif newX + self.size > config.GRID_WIDTH:
-                newX = config.GRID_WIDTH - self.size
-
-            if newY < 0:
-                newY = 0
-            elif newY + self.size > config.GRID_HEIGHT:
-                newY = config.GRID_HEIGHT - self.size
-
-            # Return the adjusted position
-            return QPointF(newX, newY)
-
-        return super().itemChange(change, value)
+    # Snap to grid
+    def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent):
+        x = round(event.scenePos().x() / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
+        y = round(event.scenePos().y() / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
+        pos = QPointF(x, y)
+        self.setPos(pos)
