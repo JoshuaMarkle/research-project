@@ -70,7 +70,7 @@ class Sidebar(QWidget):
         difficultyToggleLayout = QHBoxLayout()
         difficultyToggleLabel = QLabel('Toggle Difficulty View:', self)
         difficultyToggleCheckbox = QCheckBox(self)
-        difficultyToggleCheckbox.setChecked(False)
+        difficultyToggleCheckbox.setChecked(config.DIFFICULTY_TOGGLE)
         difficultyToggleLayout.addWidget(difficultyToggleLabel)
         difficultyToggleLayout.addWidget(difficultyToggleCheckbox)
         difficultyToggleCheckbox.stateChanged.connect(self.onToggleDifficultyChanged)
@@ -107,5 +107,7 @@ class Sidebar(QWidget):
         # state will be 0 if unchecked, 2 if checked
         if state == 2:
             print("Difficulty view enabled")
+            config.DIFFICULTY_TOGGLE = True
         else:
             print("Difficulty view disabled")
+            config.DIFFICULTY_TOGGLE = False

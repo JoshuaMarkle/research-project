@@ -12,15 +12,16 @@ class DesignScene(QGraphicsScene):
         self.setSceneRect(0, 0, config.GRID_WIDTH, config.GRID_HEIGHT)
 
         # Assuming you have set a scene rect somewhere
-        centerX = self.width() / 2
-        centerY = self.height() / 2
+        centerX = self.width() / 2 - 5 * config.KEY_SIZE
+        centerY = self.height() / 2 - 5 * config.KEY_SIZE
 
-        # Adjust for key size to ensure the center of the key aligns with the center of the scene
-        keyPosition = QPointF(centerX - 20, centerY - 20)  # Half of the key size (40/2 = 20)
-
-        # Create and add the key to the scene
-        key = Key('A', keyPosition, 1, 'Medium')
-        self.addItem(key)
+        # Generate a standard layout
+        abcs = "qwertyuiopasdfghjkl;zxcvbnm,./".upper()
+        for i in range(3):
+            for j in range(10):
+                keyPosition = QPointF(centerX + j * config.GRID_SIZE - config.KEY_SIZE/2, centerY + i * config.GRID_SIZE - config.KEY_SIZE/2)
+                key = Key(abcs[j + 10 * i], keyPosition, j, j % 5 + 1)
+                self.addItem(key)
 
     def drawBackground(self, painter: QPainter, rect):
         self.gridSize = config.GRID_SIZE
@@ -117,21 +118,45 @@ class Key(QGraphicsItem):
         return QRectF(0, 0, self.size, self.size)
 
     def paint(self, painter, option, widget=None):
-        # Draw the base
-        pen = QPen(QColor('black'), 2)
-        painter.setPen(pen)
-        painter.setBrush(QColor('lightgrey'))
-        painter.drawRect(self.boundingRect())
+        keyColor = config.KEY_COLOR
+        keyColorTop = config.KEY_COLOR_TOP
+        keyColorBorder = 'black'
+        if config.DIFFICULTY_TOGGLE:
+            if self.difficulty == 1:
+                keyColor = config.KEY_COLOR_DIFF_1
+                keyColorTop = config.KEY_COLOR_TOP_DIFF_1
+            if self.difficulty == 2:
+                keyColor = config.KEY_COLOR_DIFF_2
+                keyColorTop = config.KEY_COLOR_TOP_DIFF_2
+            if self.difficulty == 3:
+                keyColor = config.KEY_COLOR_DIFF_3
+                keyColorTop = config.KEY_COLOR_TOP_DIFF_3
+            if self.difficulty == 4:
+                keyColor = config.KEY_COLOR_DIFF_4
+                keyColorTop = config.KEY_COLOR_TOP_DIFF_4
+            if self.difficulty == 5:
+                keyColor = config.KEY_COLOR_DIFF_5
+                keyColorTop = config.KEY_COLOR_TOP_DIFF_5
 
-        # Draw the top
-        pen = QPen(QColor('white'), 5)
-        topRect = QRectF(self.size * .2, self.size * .13, self.size * .6, self.size * .6)
+        # Draw the base
+        path = QPainterPath()
+        path.addRoundedRect(self.boundingRect(), 4, 4)
+        pen = QPen(QColor(keyColorBorder), 2)
         painter.setPen(pen)
-        painter.setBrush(QColor('white'))
-        painter.drawRect(topRect)
+        painter.fillPath(path, QColor(keyColor))
+        painter.drawPath(path)
+        
+        # Draw the top
+        path = QPainterPath()
+        topRect = QRectF(self.size * .15, self.size * 0.08, self.size * .7, self.size * .7)
+        path.addRoundedRect(topRect, 4, 4)
+        pen = QPen(QColor(keyColorTop), 0)
+        painter.setPen(pen)
+        painter.fillPath(path, QColor(keyColorTop))
+        painter.drawPath(path)
 
         # Draw the letter
-        pen = QPen(QColor('black'), 2)
+        pen = QPen(QColor(keyColorBorder), 2)
         painter.setPen(pen)
         painter.drawText(topRect, Qt.AlignCenter, self.letter)
 
