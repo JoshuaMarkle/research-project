@@ -89,6 +89,7 @@ class DesignView(QGraphicsView):
 
             self.selectionRect = None  # Reset the selection rectangle
             self.update()  # Trigger a repaint
+
         super().mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
@@ -101,6 +102,7 @@ class DesignView(QGraphicsView):
         if event.buttons() & Qt.RightButton and self.selectionRect is not None:
             self.selectionRect.setBottomRight(event.pos())  # Update the selection rectangle
             self.update()  # Trigger a repaint
+
         super().mouseMoveEvent(event)
 
     def wheelEvent(self, event):
@@ -132,17 +134,13 @@ class DesignView(QGraphicsView):
         super().paintEvent(event)
         if self.selectionRect: # Draw selection area
             painter = QPainter(self.viewport())
-            fillColor = QColor(config.COLOR_8)
-            pen = QPen(fillColor, 1)
-            pen.setStyle(Qt.DashLine)
-            painter.setPen(pen)
+            painter.setPen(Qt.DashLine)
+            painter.drawRect(self.selectionRect)
 
+            fillColor = QColor(config.COLOR_8)
             fillColor.setAlpha(50)
             pen = QPen(fillColor, 1)
-            pen.setStyle(Qt.DashLine)
             painter.setPen(pen)
             painter.drawRect(self.selectionRect)
             painter.fillRect(self.selectionRect, fillColor)
-
-
 

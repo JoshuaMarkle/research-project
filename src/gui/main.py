@@ -1,7 +1,11 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import * 
+
 from scene import DesignScene, DesignView
 from sidebar import Sidebar
+from keyedit import KeyEditorSidebar
+from key import *
 
 # User
 # I want to write a python gui that allows the user to create their own physical keyboard. I want to make it so the user can create keys, delete keys, change key characteristics (position, finger number, difficulty, and more), move around the keys on a grid. I want all of this to happen on the right side of the screen. On the left side of the screen, I want a small interactive sidebar that has a bunch of settings adjusters and nice things. For example it would have a toggler for difficulty that would then color all of the keys a shade of red based on the difficulty setting for that key. It would also have input for key size, grid size, import json, and export json. Do you understand this project
@@ -15,23 +19,64 @@ class MainWindow(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        # Main widget and horizontal layout
-        main_widget = QWidget(self)
-        self.setCentralWidget(main_widget)
-        main_layout = QHBoxLayout(main_widget)
+        # Initialize QTabWidget
+        self.tabs = QTabWidget(self)
+        self.setCentralWidget(self.tabs)
+
+        # Editor tab
+        self.editorTab = QWidget()
+        self.tabs.addTab(self.editorTab, "Editor")
+        self.initEditorUI()
+
+        # Optimizer tab
+        self.optimizerTab = QWidget()
+        self.tabs.addTab(self.optimizerTab, "Optimizer")
+        self.initOptimizerUI()
+
+    def initEditorUI(self):
+        # Layout for the Editor tab
+        editor_layout = QHBoxLayout(self.editorTab)
+
+        # Initialize QSplitter
+        splitter = QSplitter(Qt.Horizontal)
+        editor_layout.addWidget(splitter)
 
         # Sidebar
         self.sidebar = Sidebar()
-        main_layout.addWidget(self.sidebar, alignment=Qt.AlignLeft)
+        splitter.addWidget(self.sidebar)
+
+        # Key Editor
+        self.keyedit = KeyEditorSidebar()
+        splitter.addWidget(self.keyedit)
 
         # Design area (scene and view)
-        self.designScene = DesignScene()
-        self.designView = DesignView(self.designScene)
-        main_layout.addWidget(self.designView)
+        self.designScene = DesignScene()  # Assuming DesignScene() is defined elsewhere
+        self.designView = DesignView(self.designScene)  # Assuming DesignView() is defined elsewhere
+        self.sidebar.scene = self.designScene
+        splitter.addWidget(self.designView)
 
-        # Set the stretch factors to give the design area more space
-        main_layout.setStretch(0, 1)  # Design area gets more space
-        main_layout.setStretch(1, 6)  # Sidebar gets less space
+        self.sidebar.setFixedWidth(200)
+        self.keyedit.setFixedWidth(200)
+
+        # Optional: Set the stretch factors if you want one area to take more space by default
+        splitter.setStretchFactor(0, 1)
+        splitter.setStretchFactor(0, 1)
+        splitter.setStretchFactor(1, 3)
+
+        self.designScene.selectionChanged.connect(self.updateSelectedKeys)
+
+    def initOptimizerUI(self):
+        # Layout for the Optimizer tab
+        optimizer_layout = QVBoxLayout(self.optimizerTab)
+
+        # Add components for the Optimizer tab
+        # For example, you could add some labels, buttons, etc.
+        # optimizer_layout.addWidget(some_widget)
+
+    def updateSelectedKeys(self):
+        selectedItems = self.designScene.selectedItems()
+        selectedKeys = [item for item in selectedItems if isinstance(item, Key)]
+        self.keyedit.setSelectedKeys(selectedKeys)
 
 if __name__ == '__main__':
     app = QApplication([])
