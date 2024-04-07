@@ -1,8 +1,11 @@
+from math import ceil
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
 import config
+from key import *
 
 class DesignScene(QGraphicsScene):
     def __init__(self, parent=None):
@@ -19,8 +22,10 @@ class DesignScene(QGraphicsScene):
         abcs = "qwertyuiopasdfghjkl;zxcvbnm,./".upper()
         for i in range(3):
             for j in range(10):
-                keyPosition = QPointF(centerX + j * config.GRID_SIZE - config.KEY_SIZE/2, centerY + i * config.GRID_SIZE - config.KEY_SIZE/2)
-                key = Key(abcs[j + 10 * i], keyPosition, j, j % 5 + 1)
+                x = centerX + j * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2 + config.GRID_SIZE * i
+                y = centerY + i * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
+                keyPosition = QPointF(x, y)
+                key = Key(abcs[j + 10 * i], keyPosition, j + 1, j % 5 + 1)
                 self.addItem(key)
 
     def drawBackground(self, painter: QPainter, rect):
@@ -56,17 +61,34 @@ class DesignView(QGraphicsView):
         self.minZoomLevel = 0.2
         self.maxZoomLevel = 5.0
         self.currentZoomLevel = 1.0
+        self.selectionRect = None  # Initialize selection rectangle
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.RightButton:
+        if event.button() == Qt.LeftButton:
+            super().mousePressEvent(event) # Drag items around
+        if event.button() == Qt.MidButton:
             self.lastPanPoint = event.pos()
             self.setCursor(Qt.ClosedHandCursor)
-        super().mousePressEvent(event)
+        if event.button() == Qt.RightButton:
+            self.origin = event.pos()  # Starting point for the selection rectangle
+            self.selectionRect = QRect(self.origin, QSize())  # Initialize the selection rectangle
+            self.update()  # Trigger a repaint
 
     def mouseReleaseEvent(self, event):
-        if event.button() == Qt.RightButton:
+        if event.button() == Qt.MidButton:
             self.lastPanPoint = QPoint()
             self.setCursor(Qt.ArrowCursor)
+        if event.button() == Qt.RightButton and self.selectionRect is not None:
+            # Convert QRectF to QPainterPath
+            selectionPath = QPainterPath()
+            rect = QRectF(self.mapToScene(self.selectionRect.topLeft()), self.mapToScene(self.selectionRect.bottomRight()))
+            selectionPath.addRect(rect)  # Add the QRectF as a rectangle path to the QPainterPath
+
+            # Use the QPainterPath for selection
+            self.scene().setSelectionArea(selectionPath)  # Now using a QPainterPath
+
+            self.selectionRect = None  # Reset the selection rectangle
+            self.update()  # Trigger a repaint
         super().mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
@@ -76,6 +98,9 @@ class DesignView(QGraphicsView):
             self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - delta.x())
             self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta.y())
             self.lastPanPoint = event.pos()
+        if event.buttons() & Qt.RightButton and self.selectionRect is not None:
+            self.selectionRect.setBottomRight(event.pos())  # Update the selection rectangle
+            self.update()  # Trigger a repaint
         super().mouseMoveEvent(event)
 
     def wheelEvent(self, event):
@@ -103,66 +128,21 @@ class DesignView(QGraphicsView):
             delta = newPos - oldPos
             self.translate(delta.x(), delta.y())
 
-class Key(QGraphicsItem):
-    def __init__(self, letter, position, finger_number, difficulty, parent=None):
-        super().__init__(parent)
-        self.letter = letter
-        self.setPos(position)  # Position should be a QPointF
-        self.finger_number = finger_number
-        self.difficulty = difficulty
-        self.size = config.KEY_SIZE # Key size
-        self.setFlags(QGraphicsItem.ItemIsMovable | QGraphicsItem.ItemIsSelectable)
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        if self.selectionRect: # Draw selection area
+            painter = QPainter(self.viewport())
+            fillColor = QColor(config.COLOR_8)
+            pen = QPen(fillColor, 1)
+            pen.setStyle(Qt.DashLine)
+            painter.setPen(pen)
 
-    def boundingRect(self):
-        # Define the bounding box for the key
-        return QRectF(0, 0, self.size, self.size)
+            fillColor.setAlpha(50)
+            pen = QPen(fillColor, 1)
+            pen.setStyle(Qt.DashLine)
+            painter.setPen(pen)
+            painter.drawRect(self.selectionRect)
+            painter.fillRect(self.selectionRect, fillColor)
 
-    def paint(self, painter, option, widget=None):
-        keyColor = config.KEY_COLOR
-        keyColorTop = config.KEY_COLOR_TOP
-        keyColorBorder = 'black'
-        if config.DIFFICULTY_TOGGLE:
-            if self.difficulty == 1:
-                keyColor = config.KEY_COLOR_DIFF_1
-                keyColorTop = config.KEY_COLOR_TOP_DIFF_1
-            if self.difficulty == 2:
-                keyColor = config.KEY_COLOR_DIFF_2
-                keyColorTop = config.KEY_COLOR_TOP_DIFF_2
-            if self.difficulty == 3:
-                keyColor = config.KEY_COLOR_DIFF_3
-                keyColorTop = config.KEY_COLOR_TOP_DIFF_3
-            if self.difficulty == 4:
-                keyColor = config.KEY_COLOR_DIFF_4
-                keyColorTop = config.KEY_COLOR_TOP_DIFF_4
-            if self.difficulty == 5:
-                keyColor = config.KEY_COLOR_DIFF_5
-                keyColorTop = config.KEY_COLOR_TOP_DIFF_5
 
-        # Draw the base
-        path = QPainterPath()
-        path.addRoundedRect(self.boundingRect(), 4, 4)
-        pen = QPen(QColor(keyColorBorder), 2)
-        painter.setPen(pen)
-        painter.fillPath(path, QColor(keyColor))
-        painter.drawPath(path)
-        
-        # Draw the top
-        path = QPainterPath()
-        topRect = QRectF(self.size * .15, self.size * 0.08, self.size * .7, self.size * .7)
-        path.addRoundedRect(topRect, 4, 4)
-        pen = QPen(QColor(keyColorTop), 0)
-        painter.setPen(pen)
-        painter.fillPath(path, QColor(keyColorTop))
-        painter.drawPath(path)
 
-        # Draw the letter
-        pen = QPen(QColor(keyColorBorder), 2)
-        painter.setPen(pen)
-        painter.drawText(topRect, Qt.AlignCenter, self.letter)
-
-    # Snap to grid
-    def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent):
-        x = round(event.scenePos().x() / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
-        y = round(event.scenePos().y() / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
-        pos = QPointF(x, y)
-        self.setPos(pos)

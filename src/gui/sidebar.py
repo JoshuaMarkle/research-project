@@ -76,6 +76,16 @@ class Sidebar(QWidget):
         difficultyToggleCheckbox.stateChanged.connect(self.onToggleDifficultyChanged)
         layout.addLayout(difficultyToggleLayout)
 
+        # Toggle Finger View
+        fingerToggleLayout = QHBoxLayout()
+        fingerToggleLabel = QLabel('Toggle Finger View:', self)
+        fingerToggleCheckbox = QCheckBox(self)
+        fingerToggleCheckbox.setChecked(config.FINGER_TOGGLE)
+        fingerToggleLayout.addWidget(fingerToggleLabel)
+        fingerToggleLayout.addWidget(fingerToggleCheckbox)
+        fingerToggleCheckbox.stateChanged.connect(self.onToggleFingerChanged)
+        layout.addLayout(fingerToggleLayout)
+
         # Spacer to make everything move to top
         label = QLabel()   
         layout.addWidget(label)
@@ -103,11 +113,22 @@ class Sidebar(QWidget):
 
 
     def onToggleDifficultyChanged(self, state):
-        # Handle the difficulty toggle change here
-        # state will be 0 if unchecked, 2 if checked
         if state == 2:
             print("Difficulty view enabled")
+            config.FINGER_TOGGLE = False
             config.DIFFICULTY_TOGGLE = True
         else:
             print("Difficulty view disabled")
             config.DIFFICULTY_TOGGLE = False
+
+    def onToggleFingerChanged(self, state):
+        if state == 2:
+            print("Finger view enabled")
+            config.DIFFICULTY_TOGGLE = False
+            config.FINGER_TOGGLE = True
+        else:
+            print("Finger view disabled")
+            config.FINGER_TOGGLE = False
+
+
+

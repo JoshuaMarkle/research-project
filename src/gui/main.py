@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout
 from PyQt5.QtCore import Qt
-from ui_components import DesignScene, DesignView
+from scene import DesignScene, DesignView
 from sidebar import Sidebar
 
 # User
