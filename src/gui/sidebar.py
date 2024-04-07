@@ -1,4 +1,5 @@
 import json
+from math import ceil
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -102,6 +103,10 @@ class Sidebar(QWidget):
         self.fingerRestToggleCheckbox.stateChanged.connect(self.onToggleFingerRestChanged)
         layout.addLayout(fingerRestToggleLayout)
 
+        # Add Key Button
+        addKeyButton = QPushButton("Add Key", self)  
+        addKeyButton.pressed.connect(self.onAddKey)  
+        layout.addWidget(addKeyButton)
 
         # Preset label
         label = QLabel("Template Layouts", self)
@@ -115,11 +120,6 @@ class Sidebar(QWidget):
         keyboardLayoutDropdown.addItem("Corne")
         keyboardLayoutDropdown.addItem("100%")
         layout.addWidget(keyboardLayoutDropdown)
-
-        # Export Json Button
-        exportJsonButton = QPushButton("Load Preset", self)  
-        exportJsonButton.pressed.connect(self.onExportJson)  
-        layout.addWidget(exportJsonButton)
 
         # Json label
         label = QLabel("Json Toggle", self)
@@ -219,3 +219,18 @@ class Sidebar(QWidget):
             with open(filename, 'w') as outfile:
                 json.dump(keys_data, outfile, indent=4)
             print(f"Keyboard layout exported to {filename}.")
+
+    def onAddKey(self):
+        if self.scene:
+            newPos = QPointF(self.scene.sceneRect().width()/2, self.scene.sceneRect().height()/2)
+            keys = [item for item in self.scene.items() if isinstance(item, Key)]
+            if len(keys) != 0:
+                lastKey = keys[0]
+                for key in keys:
+                    if lastKey.index < key.index:
+                        lastKey = key
+                x = lastKey.pos().x() + ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE
+                newPos = QPointF(x, lastKey.pos().y())
+
+            newKey = Key("A", newPos, 1, 1, len(keys) + 1)
+            self.scene.addItem(newKey)

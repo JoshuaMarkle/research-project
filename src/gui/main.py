@@ -56,16 +56,22 @@ class MainWindow(QMainWindow):
         self.designScene = DesignScene()  # Assuming DesignScene() is defined elsewhere
         self.designView = DesignView(self.designScene)  # Assuming DesignView() is defined elsewhere
         self.sidebar.scene = self.designScene
+        self.keyedit.scene = self.designScene
         splitter.addWidget(self.designView)
 
         self.sidebarTabs.setMinimumWidth(200)
         self.designView.setMinimumWidth(500)
 
         self.designScene.selectionChanged.connect(self.updateSelectedKeys)
+        self.designScene.changed.connect(self.updateKeys)
 
     def initOptimizerUI(self):
         # Layout for the Optimizer tab
         optimizer_layout = QVBoxLayout(self.optimizerTab)
+
+    def updateKeys(self):
+        allKeys = [item for item in self.designScene.items() if isinstance(item, Key)]
+        self.keyedit.setKeys(allKeys)
 
     def updateSelectedKeys(self):
         selectedItems = self.designScene.selectedItems()

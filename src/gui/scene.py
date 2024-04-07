@@ -25,7 +25,7 @@ class DesignScene(QGraphicsScene):
                 x = centerX + j * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2 + config.GRID_SIZE * i
                 y = centerY + i * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
                 keyPosition = QPointF(x, y)
-                key = Key(abcs[j + 10 * i], keyPosition, j + 1, j % 5 + 1)
+                key = Key(abcs[j + 10 * i], keyPosition, j + 1, j % 5 + 1, len(self.items()))
                 self.addItem(key)
 
     def drawBackground(self, painter: QPainter, rect):
@@ -61,6 +61,13 @@ class DesignScene(QGraphicsScene):
         centerY = self.sceneRect().height() / 2
         painter.drawLine(int(self.sceneRect().left()), int(centerY), int(self.sceneRect().right()), int(centerY))
         painter.drawLine(int(centerX), int(self.sceneRect().top()), int(centerX), int(self.sceneRect().bottom()))
+
+    # Called when there are gaps within the key indexs
+    def fillKeyIndices(self):
+        keys = [item for item in self.items() if isinstance(item, Key)]
+        keys.sort(key=lambda x: x.index)
+        for i in range(len(keys)):
+            keys[i].index = i + 1
 
 class DesignView(QGraphicsView):
     def __init__(self, scene, parent=None):

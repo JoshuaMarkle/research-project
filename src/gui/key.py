@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 import config
 
 class Key(QGraphicsItem):
-    def __init__(self, letter, position, finger_number, difficulty, parent=None):
+    def __init__(self, letter, position, finger_number, difficulty, ind, parent=None):
         super().__init__(parent)
         self.label = letter
         self.setPos(position)  # Position should be a QPointF
@@ -13,6 +13,7 @@ class Key(QGraphicsItem):
         self.main_finger = False
         self.difficulty = difficulty
         self.size = config.KEY_SIZE # Key size
+        self.index = ind
         self.setFlags(QGraphicsItem.ItemIsMovable | QGraphicsItem.ItemIsSelectable)
 
     def boundingRect(self):
@@ -39,8 +40,6 @@ class Key(QGraphicsItem):
                 keyColorTop = config.COLOR_3
                 keyColor = config.COLOR_DARK_3
 
-
-
         # Draw the base
         path = QPainterPath()
         path.addRoundedRect(self.boundingRect(), 5, 5)
@@ -59,7 +58,7 @@ class Key(QGraphicsItem):
         painter.drawPath(path)
 
         # Draw the letter
-        text = str(self.finger_number) if config.FINGER_TOGGLE else self.label
+        text = str(self.finger_number) if config.FINGER_TOGGLE or config.FINGER_REST_TOGGLE else str(self.index)
         pen = QPen(QColor(keyColorBorder), 2)
         painter.setPen(pen)
         painter.drawText(topRect, Qt.AlignCenter, text)
