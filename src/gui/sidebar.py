@@ -16,24 +16,27 @@ class Sidebar(QWidget):
         layout = QVBoxLayout(self)
 
         # Settings label
-        label = QLabel('Settings', self)
+        label = QLabel("Settings", self)
         label.setAlignment(Qt.AlignLeft)
-        label.setStyleSheet('font-weight: bold; font-size: 18px')
+        label.setStyleSheet("font-weight: bold; font-size: 18px")
         layout.addWidget(label)
 
         # Grid label
-        label = QLabel('Grid Settings', self)
+        label = QLabel("Grid Settings", self)
         label.setAlignment(Qt.AlignLeft)
-        label.setStyleSheet('font-weight: bold')
+        label.setStyleSheet("font-weight: bold")
         layout.addWidget(label)
+
+        # Toggle Grid
+        # Reset grid button
 
         # Grid Size Setting
         gridSizeLayout = QHBoxLayout()
-        gridSizeLabel = QLabel('Grid Size:', self)
+        gridSizeLabel = QLabel("Grid Size:", self)
         gridSizeInput = QLineEdit(self)
         gridSizeInput.setPlaceholderText(str(config.GRID_SIZE))
         gridSizeInput.setText(str(config.GRID_SIZE))
-        gridSizeInput.setValidator(QIntValidator(20, 200, self))
+        gridSizeInput.setValidator(QIntValidator(0, 9999, self))
         gridSizeLayout.addWidget(gridSizeLabel)
         gridSizeLayout.addWidget(gridSizeInput)
         gridSizeInput.textChanged.connect(self.onGridSizeChanged)
@@ -41,11 +44,11 @@ class Sidebar(QWidget):
 
         # Grid Height Setting
         gridHeightLayout = QHBoxLayout()
-        gridHeightLabel = QLabel('Grid Height:', self)
+        gridHeightLabel = QLabel("Grid Height:", self)
         gridHeightInput = QLineEdit(self)
         gridHeightInput.setPlaceholderText(str(config.GRID_HEIGHT))
         gridHeightInput.setText(str(config.GRID_HEIGHT))
-        gridHeightInput.setValidator(QIntValidator(1, 999, self))
+        gridHeightInput.setValidator(QIntValidator(0, 9999, self))
         gridHeightLayout.addWidget(gridHeightLabel)
         gridHeightLayout.addWidget(gridHeightInput)
         gridHeightInput.textChanged.connect(self.onGridHeightChanged)
@@ -53,7 +56,7 @@ class Sidebar(QWidget):
 
         # Grid Width Setting
         gridWidthLayout = QHBoxLayout()
-        gridWidthLabel = QLabel('Grid Width:', self)
+        gridWidthLabel = QLabel("Grid Width:", self)
         gridWidthInput = QLineEdit(self)
         gridWidthInput.setPlaceholderText(str(config.GRID_WIDTH))
         gridWidthInput.setText(str(config.GRID_WIDTH))
@@ -64,14 +67,14 @@ class Sidebar(QWidget):
         layout.addLayout(gridWidthLayout)
 
         # Layer label
-        label = QLabel('Layer Toggle', self)
+        label = QLabel("Layer Toggle", self)
         label.setAlignment(Qt.AlignLeft)
-        label.setStyleSheet('font-weight: bold')
+        label.setStyleSheet("font-weight: bold")
         layout.addWidget(label)
 
         # Toggle Difficulty View
         difficultyToggleLayout = QHBoxLayout()
-        difficultyToggleLabel = QLabel('Toggle Difficulty View:', self)
+        difficultyToggleLabel = QLabel("Toggle Difficulty View:", self)
         self.difficultyToggleCheckbox = QCheckBox(self)
         self.difficultyToggleCheckbox.setChecked(config.DIFFICULTY_TOGGLE)
         difficultyToggleLayout.addWidget(difficultyToggleLabel)
@@ -81,7 +84,7 @@ class Sidebar(QWidget):
 
         # Toggle Finger View
         fingerToggleLayout = QHBoxLayout()
-        fingerToggleLabel = QLabel('Toggle Finger View:', self)
+        fingerToggleLabel = QLabel("Toggle Finger View:", self)
         self.fingerToggleCheckbox = QCheckBox(self)
         self.fingerToggleCheckbox.setChecked(config.FINGER_TOGGLE)
         fingerToggleLayout.addWidget(fingerToggleLabel)
@@ -89,10 +92,21 @@ class Sidebar(QWidget):
         self.fingerToggleCheckbox.stateChanged.connect(self.onToggleFingerChanged)
         layout.addLayout(fingerToggleLayout)
 
+        # Toggle Finger Rest View
+        fingerRestToggleLayout = QHBoxLayout()
+        fingerRestToggleLabel = QLabel("Finger Resting Pos View:", self)
+        self.fingerRestToggleCheckbox = QCheckBox(self)
+        self.fingerRestToggleCheckbox.setChecked(config.FINGER_REST_TOGGLE)
+        fingerRestToggleLayout.addWidget(fingerRestToggleLabel)
+        fingerRestToggleLayout.addWidget(self.fingerRestToggleCheckbox)
+        self.fingerRestToggleCheckbox.stateChanged.connect(self.onToggleFingerRestChanged)
+        layout.addLayout(fingerRestToggleLayout)
+
+
         # Preset label
-        label = QLabel('Template Layouts', self)
+        label = QLabel("Template Layouts", self)
         label.setAlignment(Qt.AlignLeft)
-        label.setStyleSheet('font-weight: bold')
+        label.setStyleSheet("font-weight: bold")
         layout.addWidget(label)
 
         # Preset dropdown
@@ -108,9 +122,9 @@ class Sidebar(QWidget):
         layout.addWidget(exportJsonButton)
 
         # Json label
-        label = QLabel('Json Toggle', self)
+        label = QLabel("Json Toggle", self)
         label.setAlignment(Qt.AlignLeft)
-        label.setStyleSheet('font-weight: bold')
+        label.setStyleSheet("font-weight: bold")
         layout.addWidget(label)
 
         # Export Json Button
@@ -130,60 +144,68 @@ class Sidebar(QWidget):
         verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
         layout.addItem(verticalSpacer)
 
-
-
     def onGridSizeChanged(self, value):
         if value:
-            config.GRID_SIZE = int(value)
-            print(f"Grid size changed to: {value}")
-        print(config.GRID_SIZE)
+            try:
+                value = min(int(value), 2000)
+                config.GRID_SIZE = int(value)
+            except: pass
 
     def onGridHeightChanged(self, value):
         if value:
-            config.GRID_HEIGHT = int(value)
-            print(f"Grid size changed to: {value}")
-        print(config.GRID_HEIGHT)
+            try:
+                value = min(int(value), 2000)
+                config.GRID_HEIGHT = int(value)
+            except: pass
 
     def onGridWidthChanged(self, value):
         if value:
             config.GRID_WIDTH = int(value)
-            print(f"Grid size changed to: {value}")
-        print(config.GRID_WIDTH)
 
 
     def onToggleDifficultyChanged(self, state):
         if state == 2:
-            print("Difficulty view enabled")
             config.DIFFICULTY_TOGGLE = True
             config.FINGER_TOGGLE = False
+            config.FINGER_REST_TOGGLE = False
             self.fingerToggleCheckbox.setChecked(False)
+            self.fingerRestToggleCheckbox.setChecked(False)
         else:
-            print("Difficulty view disabled")
             config.DIFFICULTY_TOGGLE = False
 
     def onToggleFingerChanged(self, state):
         if state == 2:
-            print("Finger view enabled")
             config.FINGER_TOGGLE = True
             config.DIFFICULTY_TOGGLE = False
+            config.FINGER_REST_TOGGLE = False
             self.difficultyToggleCheckbox.setChecked(False)
+            self.fingerRestToggleCheckbox.setChecked(False)
         else:
-            print("Finger view disabled")
             config.FINGER_TOGGLE = False
 
+    def onToggleFingerRestChanged(self, state):
+        if state == 2:
+            config.FINGER_REST_TOGGLE = True
+            config.DIFFICULTY_TOGGLE = False
+            config.FINGER_TOGGLE = False
+            self.difficultyToggleCheckbox.setChecked(False)
+            self.fingerToggleCheckbox.setChecked(False)
+        else:
+            config.FINGER_REST_TOGGLE = False
+
     def onImportJson(self):
-        print('importing')
+        print("importing")
 
     def onExportJson(self):
         if not self.scene:
-            print("No scene available for export.")
+            print("Something went wrong! No scene available for export.")
             return
 
         keys_data = []
         for item in self.scene.items():
             if isinstance(item, Key):
                 key_data = {
-                    'letter': item.letter,
+                    'letter': item.label,
                     'position': {'x': item.pos().x(), 'y': item.pos().y()},
                     'finger_number': item.finger_number,
                     'difficulty': item.difficulty
@@ -191,12 +213,9 @@ class Sidebar(QWidget):
                 keys_data.append(key_data)
 
         filename = QFileDialog.getSaveFileName(self, 'Save File', '', 'JSON (*.json)')[0]
+        if filename[-5:] != ".json":
+            filename += ".json"
         if filename:
             with open(filename, 'w') as outfile:
                 json.dump(keys_data, outfile, indent=4)
             print(f"Keyboard layout exported to {filename}.")
-
-
-
-
-

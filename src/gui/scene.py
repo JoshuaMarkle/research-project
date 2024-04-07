@@ -12,7 +12,7 @@ class DesignScene(QGraphicsScene):
         super().__init__(parent)
         self.gridSize = config.GRID_SIZE
         self.setBackgroundBrush(QColor(255, 255, 255))
-        self.setSceneRect(0, 0, config.GRID_WIDTH, config.GRID_HEIGHT)
+        self.setSceneRect(0, 0, config.GRID_WIDTH * config.GRID_SIZE, config.GRID_HEIGHT * config.GRID_SIZE)
 
         # Assuming you have set a scene rect somewhere
         centerX = self.width() / 2 - 5 * config.KEY_SIZE
@@ -30,7 +30,7 @@ class DesignScene(QGraphicsScene):
 
     def drawBackground(self, painter: QPainter, rect):
         self.gridSize = config.GRID_SIZE
-        self.setSceneRect(0, 0, config.GRID_WIDTH, config.GRID_HEIGHT)
+        self.setSceneRect(0, 0, config.GRID_WIDTH * config.GRID_SIZE, config.GRID_HEIGHT * config.GRID_SIZE)
 
         # Redraw the whole background (only here for dynamic GRID_SIZE)
         self.setBackgroundBrush(QColor(255, 255, 255))
@@ -53,13 +53,22 @@ class DesignScene(QGraphicsScene):
         for x in range(int(topLeft.x()), int(bottomRight.x()), self.gridSize):
             painter.drawLine(x, int(topLeft.y()), x, int(bottomRight.y()))
 
+        # Draw the axis on the grid
+        axisPen = QPen(QColor(config.COLOR_ALT))
+        axisPen.setWidth(2)
+        painter.setPen(axisPen)
+        centerX = self.sceneRect().width() / 2
+        centerY = self.sceneRect().height() / 2
+        painter.drawLine(int(self.sceneRect().left()), int(centerY), int(self.sceneRect().right()), int(centerY))
+        painter.drawLine(int(centerX), int(self.sceneRect().top()), int(centerX), int(self.sceneRect().bottom()))
+
 class DesignView(QGraphicsView):
     def __init__(self, scene, parent=None):
         super().__init__(scene, parent)
         self.setDragMode(QGraphicsView.NoDrag)
         self.lastPanPoint = QPoint()
-        self.minZoomLevel = 0.2
-        self.maxZoomLevel = 5.0
+        self.minZoomLevel = 0.5
+        self.maxZoomLevel = 2.0
         self.currentZoomLevel = 1.0
         self.selectionRect = None  # Initialize selection rectangle
 

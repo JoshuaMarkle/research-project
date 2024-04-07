@@ -1,0 +1,272 @@
+[
+    {
+        "letter": "/",
+        "position": {
+            "x": 1250.0,
+            "y": 790.0
+        },
+        "finger_number": 10,
+        "difficulty": 5
+    },
+    {
+        "letter": ".",
+        "position": {
+            "x": 1190.0,
+            "y": 790.0
+        },
+        "finger_number": 9,
+        "difficulty": 4
+    },
+    {
+        "letter": ",",
+        "position": {
+            "x": 1130.0,
+            "y": 790.0
+        },
+        "finger_number": 8,
+        "difficulty": 3
+    },
+    {
+        "letter": "M",
+        "position": {
+            "x": 1070.0,
+            "y": 790.0
+        },
+        "finger_number": 7,
+        "difficulty": 2
+    },
+    {
+        "letter": "N",
+        "position": {
+            "x": 1010.0,
+            "y": 790.0
+        },
+        "finger_number": 6,
+        "difficulty": 1
+    },
+    {
+        "letter": "B",
+        "position": {
+            "x": 950.0,
+            "y": 790.0
+        },
+        "finger_number": 5,
+        "difficulty": 5
+    },
+    {
+        "letter": "V",
+        "position": {
+            "x": 890.0,
+            "y": 790.0
+        },
+        "finger_number": 4,
+        "difficulty": 4
+    },
+    {
+        "letter": "C",
+        "position": {
+            "x": 830.0,
+            "y": 790.0
+        },
+        "finger_number": 3,
+        "difficulty": 3
+    },
+    {
+        "letter": "X",
+        "position": {
+            "x": 770.0,
+            "y": 790.0
+        },
+        "finger_number": 2,
+        "difficulty": 2
+    },
+    {
+        "letter": "Z",
+        "position": {
+            "x": 710.0,
+            "y": 790.0
+        },
+        "finger_number": 1,
+        "difficulty": 1
+    },
+    {
+        "letter": ";",
+        "position": {
+            "x": 1230.0,
+            "y": 730.0
+        },
+        "finger_number": 10,
+        "difficulty": 5
+    },
+    {
+        "letter": "L",
+        "position": {
+            "x": 1170.0,
+            "y": 730.0
+        },
+        "finger_number": 9,
+        "difficulty": 4
+    },
+    {
+        "letter": "K",
+        "position": {
+            "x": 1110.0,
+            "y": 730.0
+        },
+        "finger_number": 8,
+        "difficulty": 3
+    },
+    {
+        "letter": "J",
+        "position": {
+            "x": 1050.0,
+            "y": 730.0
+        },
+        "finger_number": 7,
+        "difficulty": 2
+    },
+    {
+        "letter": "H",
+        "position": {
+            "x": 990.0,
+            "y": 730.0
+        },
+        "finger_number": 6,
+        "difficulty": 1
+    },
+    {
+        "letter": "G",
+        "position": {
+            "x": 930.0,
+            "y": 730.0
+        },
+        "finger_number": 5,
+        "difficulty": 5
+    },
+    {
+        "letter": "F",
+        "position": {
+            "x": 870.0,
+            "y": 730.0
+        },
+        "finger_number": 4,
+        "difficulty": 4
+    },
+    {
+        "letter": "D",
+        "position": {
+            "x": 810.0,
+            "y": 730.0
+        },
+        "finger_number": 3,
+        "difficulty": 3
+    },
+    {
+        "letter": "S",
+        "position": {
+            "x": 750.0,
+            "y": 730.0
+        },
+        "finger_number": 2,
+        "difficulty": 2
+    },
+    {
+        "letter": "A",
+        "position": {
+            "x": 690.0,
+            "y": 730.0
+        },
+        "finger_number": 1,
+        "difficulty": 1
+    },
+    {
+        "letter": "P",
+        "position": {
+            "x": 1210.0,
+            "y": 670.0
+        },
+        "finger_number": 10,
+        "difficulty": 5
+    },
+    {
+        "letter": "O",
+        "position": {
+            "x": 1150.0,
+            "y": 670.0
+        },
+        "finger_number": 9,
+        "difficulty": 4
+    },
+    {
+        "letter": "I",
+        "position": {
+            "x": 1090.0,
+            "y": 670.0
+        },
+        "finger_number": 8,
+        "difficulty": 3
+    },
+    {
+        "letter": "U",
+        "position": {
+            "x": 1030.0,
+            "y": 670.0
+        },
+        "finger_number": 7,
+        "difficulty": 2
+    },
+    {
+        "letter": "Y",
+        "position": {
+            "x": 970.0,
+            "y": 670.0
+        },
+        "finger_number": 6,
+        "difficulty": 1
+    },
+    {
+        "letter": "T",
+        "position": {
+            "x": 910.0,
+            "y": 670.0
+        },
+        "finger_number": 5,
+        "difficulty": 5
+    },
+    {
+        "letter": "R",
+        "position": {
+            "x": 850.0,
+            "y": 670.0
+        },
+        "finger_number": 4,
+        "difficulty": 4
+    },
+    {
+        "letter": "E",
+        "position": {
+            "x": 790.0,
+            "y": 670.0
+        },
+        "finger_number": 3,
+        "difficulty": 3
+    },
+    {
+        "letter": "W",
+        "position": {
+            "x": 730.0,
+            "y": 670.0
+        },
+        "finger_number": 2,
+        "difficulty": 2
+    },
+    {
+        "letter": "Q",
+        "position": {
+            "x": 670.0,
+            "y": 670.0
+        },
+        "finger_number": 1,
+        "difficulty": 1
+    }
+]

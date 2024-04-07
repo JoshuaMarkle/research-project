@@ -3,14 +3,14 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
 import config
-from key import *
 
 class Key(QGraphicsItem):
     def __init__(self, letter, position, finger_number, difficulty, parent=None):
         super().__init__(parent)
-        self.letter = letter
+        self.label = letter
         self.setPos(position)  # Position should be a QPointF
         self.finger_number = finger_number
+        self.main_finger = False
         self.difficulty = difficulty
         self.size = config.KEY_SIZE # Key size
         self.setFlags(QGraphicsItem.ItemIsMovable | QGraphicsItem.ItemIsSelectable)
@@ -28,36 +28,18 @@ class Key(QGraphicsItem):
             min_difficulty, max_difficulty = self.findDifficultyRange()
             keyColorTop, keyColor = self.mapDifficultyToColor(min_difficulty, max_difficulty, self.difficulty)
         if config.FINGER_TOGGLE:
-            if self.finger_number == 1:
-                keyColorTop = config.COLOR_1
-                keyColor = config.COLOR_DARK_1
-            if self.finger_number == 2:
-                keyColorTop = config.COLOR_2
-                keyColor = config.COLOR_DARK_2
-            if self.finger_number == 3:
+            colorsTop = [config.COLOR_1, config.COLOR_2, config.COLOR_3, config.COLOR_4, config.COLOR_5, config.COLOR_6, config.COLOR_7, config.COLOR_8, config.COLOR_9, config.COLOR_10]
+            colors = [config.COLOR_DARK_1, config.COLOR_DARK_2, config.COLOR_DARK_3, config.COLOR_DARK_4, config.COLOR_DARK_5, config.COLOR_DARK_6, config.COLOR_DARK_7, config.COLOR_DARK_8, config.COLOR_DARK_9, config.COLOR_DARK_10]
+            keyColorTop = colorsTop[self.finger_number - 1]
+            keyColor = colors[self.finger_number - 1]
+        if config.FINGER_REST_TOGGLE:
+            keyColorTop = config.COLOR_DARK_0
+            keyColor = config.COLOR_ALT
+            if self.main_finger:
                 keyColorTop = config.COLOR_3
                 keyColor = config.COLOR_DARK_3
-            if self.finger_number == 4:
-                keyColorTop = config.COLOR_4
-                keyColor = config.COLOR_DARK_4
-            if self.finger_number == 5:
-                keyColorTop = config.COLOR_5
-                keyColor = config.COLOR_DARK_5
-            if self.finger_number == 6:
-                keyColorTop = config.COLOR_6
-                keyColor = config.COLOR_DARK_6
-            if self.finger_number == 7:
-                keyColorTop = config.COLOR_7
-                keyColor = config.COLOR_DARK_7
-            if self.finger_number == 8:
-                keyColorTop = config.COLOR_8
-                keyColor = config.COLOR_DARK_8
-            if self.finger_number == 9:
-                keyColorTop = config.COLOR_9
-                keyColor = config.COLOR_DARK_9
-            if self.finger_number == 10:
-                keyColorTop = config.COLOR_10
-                keyColor = config.COLOR_DARK_10
+
+
 
         # Draw the base
         path = QPainterPath()
@@ -77,7 +59,7 @@ class Key(QGraphicsItem):
         painter.drawPath(path)
 
         # Draw the letter
-        text = str(self.finger_number) if config.FINGER_TOGGLE else self.letter
+        text = str(self.finger_number) if config.FINGER_TOGGLE else self.label
         pen = QPen(QColor(keyColorBorder), 2)
         painter.setPen(pen)
         painter.drawText(topRect, Qt.AlignCenter, text)

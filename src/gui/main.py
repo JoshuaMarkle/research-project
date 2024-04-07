@@ -41,13 +41,16 @@ class MainWindow(QMainWindow):
         splitter = QSplitter(Qt.Horizontal)
         editor_layout.addWidget(splitter)
 
+        self.sidebarTabs = QTabWidget(self)
+
         # Sidebar
         self.sidebar = Sidebar()
-        splitter.addWidget(self.sidebar)
+        self.sidebarTabs.addTab(self.sidebar, "Settings")
 
         # Key Editor
         self.keyedit = KeyEditorSidebar()
-        splitter.addWidget(self.keyedit)
+        self.sidebarTabs.addTab(self.keyedit, "Key Edit")
+        splitter.addWidget(self.sidebarTabs)
 
         # Design area (scene and view)
         self.designScene = DesignScene()  # Assuming DesignScene() is defined elsewhere
@@ -55,23 +58,14 @@ class MainWindow(QMainWindow):
         self.sidebar.scene = self.designScene
         splitter.addWidget(self.designView)
 
-        self.sidebar.setFixedWidth(200)
-        self.keyedit.setFixedWidth(200)
-
-        # Optional: Set the stretch factors if you want one area to take more space by default
-        splitter.setStretchFactor(0, 1)
-        splitter.setStretchFactor(0, 1)
-        splitter.setStretchFactor(1, 3)
+        self.sidebarTabs.setMinimumWidth(200)
+        self.designView.setMinimumWidth(500)
 
         self.designScene.selectionChanged.connect(self.updateSelectedKeys)
 
     def initOptimizerUI(self):
         # Layout for the Optimizer tab
         optimizer_layout = QVBoxLayout(self.optimizerTab)
-
-        # Add components for the Optimizer tab
-        # For example, you could add some labels, buttons, etc.
-        # optimizer_layout.addWidget(some_widget)
 
     def updateSelectedKeys(self):
         selectedItems = self.designScene.selectedItems()

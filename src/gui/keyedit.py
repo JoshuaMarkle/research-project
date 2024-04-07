@@ -52,6 +52,16 @@ class KeyEditorSidebar(QWidget):
         self.difficultyInput.textChanged.connect(self.onDifficultyChanged)
         layout.addLayout(difficultyLayout)
 
+        # Toggle Main Finger Checkbox
+        mainFingerToggleLayout = QHBoxLayout()
+        mainFingerToggleLabel = QLabel("Finger Rest Location:", self)
+        self.mainFingerToggleCheckbox = QCheckBox(self)
+        self.mainFingerToggleCheckbox.setChecked(False)
+        mainFingerToggleLayout.addWidget(mainFingerToggleLabel)
+        mainFingerToggleLayout.addWidget(self.mainFingerToggleCheckbox)
+        self.mainFingerToggleCheckbox.stateChanged.connect(self.onToggleFingerRestChanged)
+        layout.addLayout(mainFingerToggleLayout)
+
         # --- Spacer to make everything move to top ---
         label = QLabel()   
         layout.addWidget(label)
@@ -68,6 +78,7 @@ class KeyEditorSidebar(QWidget):
         else:
             fingerNumbers = {key.finger_number for key in keys}
             difficulties = {key.difficulty for key in keys}
+            mainFingerKeys = {key.main_finger for key in keys}
             positionsX = {key.pos().x() for key in keys}
             positionsY = {key.pos().x() for key in keys}
 
@@ -75,6 +86,8 @@ class KeyEditorSidebar(QWidget):
             else: self.fingerNumberInput.setPlaceholderText("Mult. Vals")
             if len(set(difficulties)) == 1: self.difficultyInput.setText(str(difficulties.pop()))
             else: self.difficultyInput.setPlaceholderText("Mult. Vals")
+            if len(set(mainFingerKeys)) == 1: self.mainFingerToggleCheckbox.setChecked(mainFingerKeys.pop())
+            else: self.mainFingerToggleCheckbox.setChecked(False)
             if len(positionsX) == 1:
                 self.positionInputX.setText(str(positionsX.pop()))
                 self.positionInputY.setText(str(positionsY.pop()))
@@ -98,3 +111,10 @@ class KeyEditorSidebar(QWidget):
                     key.difficulty = int(value)
             except: pass
 
+    def onToggleFingerRestChanged(self, state):
+        if state == 2:
+            for key in self.selectedKeys:
+                key.main_finger = True
+        else:
+            for key in self.selectedKeys:
+                key.main_finger = False
