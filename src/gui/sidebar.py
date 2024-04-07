@@ -108,6 +108,11 @@ class Sidebar(QWidget):
         addKeyButton.pressed.connect(self.onAddKey)  
         layout.addWidget(addKeyButton)
 
+        # Delete Key Button
+        deleteKeyButton = QPushButton("Delete Key", self)  
+        deleteKeyButton.pressed.connect(self.onDeleteKey)  
+        layout.addWidget(deleteKeyButton)
+
         # Preset label
         label = QLabel("Template Layouts", self)
         label.setAlignment(Qt.AlignLeft)
@@ -194,7 +199,31 @@ class Sidebar(QWidget):
             config.FINGER_REST_TOGGLE = False
 
     def onImportJson(self):
-        print("importing")
+        filename, _ = QFileDialog.getOpenFileName(self, "Open JSON", "", "JSON Files (*.json)")
+        if filename:
+            with open(filename, 'r') as infile:
+                keys_data = json.load(infile)
+
+            # Clear existing keys
+            existing_keys = [item for item in self.scene.items() if isinstance(item, Key)]
+            for key in existing_keys:
+                self.scene.removeItem(key)
+
+            # Add new keys from the imported data
+            for key_data in keys_data:
+                label = key_data.get('label', 'A')  # Default to 'A' if label is not specified
+                index = key_data.get('index', 1)  # Default to 1 if index is not specified
+                x = key_data['position']['x']
+                y = key_data['position']['y']
+                finger_number = key_data.get('finger_number', 1)  # Default to 1 if finger_number is not specified
+                difficulty = key_data.get('difficulty', 0) # Default to 1 if difficulty is not specified
+                resting_position = key_data.get('resting_position', False)
+                newKey = Key(label, QPointF(x, y), finger_number, difficulty, resting_position, index)
+                self.scene.addItem(newKey)
+
+            self.scene.fillKeyIndices()
+
+            print(f"Keyboard layout imported from {filename}.")
 
     def onExportJson(self):
         if not self.scene:
@@ -205,10 +234,12 @@ class Sidebar(QWidget):
         for item in self.scene.items():
             if isinstance(item, Key):
                 key_data = {
-                    'letter': item.label,
+                    'label': item.label,
+                    'index': item.index,
                     'position': {'x': item.pos().x(), 'y': item.pos().y()},
                     'finger_number': item.finger_number,
-                    'difficulty': item.difficulty
+                    'difficulty': item.difficulty,
+                    'resting_position': item.main_finger
                 }
                 keys_data.append(key_data)
 
@@ -222,15 +253,9 @@ class Sidebar(QWidget):
 
     def onAddKey(self):
         if self.scene:
-            newPos = QPointF(self.scene.sceneRect().width()/2, self.scene.sceneRect().height()/2)
-            keys = [item for item in self.scene.items() if isinstance(item, Key)]
-            if len(keys) != 0:
-                lastKey = keys[0]
-                for key in keys:
-                    if lastKey.index < key.index:
-                        lastKey = key
-                x = lastKey.pos().x() + ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE
-                newPos = QPointF(x, lastKey.pos().y())
+            self.scene.onAddKey()
 
-            newKey = Key("A", newPos, 1, 1, len(keys) + 1)
-            self.scene.addItem(newKey)
+    def onDeleteKey(self):
+        if self.scene:
+            self.scene.onDeleteKey()
+

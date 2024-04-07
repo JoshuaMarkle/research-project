@@ -19,14 +19,14 @@ class DesignScene(QGraphicsScene):
         centerY = self.height() / 2 - 5 * config.KEY_SIZE
 
         # Generate a standard layout
-        abcs = "qwertyuiopasdfghjkl;zxcvbnm,./".upper()
-        for i in range(3):
-            for j in range(10):
-                x = centerX + j * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2 + config.GRID_SIZE * i
-                y = centerY + i * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
-                keyPosition = QPointF(x, y)
-                key = Key(abcs[j + 10 * i], keyPosition, j + 1, j % 5 + 1, len(self.items()))
-                self.addItem(key)
+        # abcs = "qwertyuiopasdfghjkl;zxcvbnm,./".upper()
+        # for i in range(3):
+        #     for j in range(10):
+        #         x = centerX + j * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2 + config.GRID_SIZE * i
+        #         y = centerY + i * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
+        #         keyPosition = QPointF(x, y)
+        #         key = Key(abcs[j + 10 * i], keyPosition, j + 1, j % 5 + 1, len(self.items()))
+        #         self.addItem(key)
 
     def drawBackground(self, painter: QPainter, rect):
         self.gridSize = config.GRID_SIZE
@@ -61,6 +61,27 @@ class DesignScene(QGraphicsScene):
         centerY = self.sceneRect().height() / 2
         painter.drawLine(int(self.sceneRect().left()), int(centerY), int(self.sceneRect().right()), int(centerY))
         painter.drawLine(int(centerX), int(self.sceneRect().top()), int(centerX), int(self.sceneRect().bottom()))
+
+    def onAddKey(self):
+        x = round(self.sceneRect().width() / 2 / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
+        y = round(self.sceneRect().height() / 2 / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
+        newPos = QPointF(x, y)
+        keys = [item for item in self.items() if isinstance(item, Key)]
+        if len(keys) != 0:
+            lastKey = keys[0]
+            for key in keys:
+                if lastKey.index < key.index:
+                    lastKey = key
+            x = lastKey.pos().x() + ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE
+            newPos = QPointF(x, lastKey.pos().y())
+
+        newKey = Key("A", newPos, 1, 1, False, len(keys) + 1)
+        self.addItem(newKey)
+
+    def onDeleteKey(self):
+        for key in self.selectedItems():
+            self.removeItem(key)
+        self.fillKeyIndices()
 
     # Called when there are gaps within the key indexs
     def fillKeyIndices(self):

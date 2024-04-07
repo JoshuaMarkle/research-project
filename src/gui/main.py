@@ -3,7 +3,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
 from scene import DesignScene, DesignView
+from showcase import ShowcaseScene, ShowcaseView
 from sidebar import Sidebar
+from optimizeside import OptimizerSidebar
 from keyedit import KeyEditorSidebar
 from key import *
 
@@ -64,19 +66,44 @@ class MainWindow(QMainWindow):
 
         self.designScene.selectionChanged.connect(self.updateSelectedKeys)
         self.designScene.changed.connect(self.updateKeys)
+        self.tabs.currentChanged.connect(self.onTabChanged)
 
     def initOptimizerUI(self):
         # Layout for the Optimizer tab
         optimizer_layout = QVBoxLayout(self.optimizerTab)
+
+        # Initialize QSplitter
+        splitter = QSplitter(Qt.Horizontal)
+        optimizer_layout.addWidget(splitter)
+
+        # Sidebar
+        self.showcaseSidebar = OptimizerSidebar()
+        splitter.addWidget(self.showcaseSidebar)
+
+        # Optimizer area (scene and view)
+        self.showcaseScene = ShowcaseScene()  # Assuming showcaseScene() is defined elsewhere
+        self.showcaseView = ShowcaseView(self.showcaseScene)  # Assuming showcaseView() is defined elsewhere
+        self.showcaseSidebar.scene = self.showcaseScene
+        splitter.addWidget(self.showcaseView)
+
+        # self.sidebarTabs.setMinimumWidth(200)
+        # self.optimizerView.setMinimumWidth(500)
+        #
+        # self.optimizerScene.selectionChanged.connect(self.updateSelectedKeys)
+        # self.optimizerScene.changed.connect(self.updateKeys)
 
     def updateKeys(self):
         allKeys = [item for item in self.designScene.items() if isinstance(item, Key)]
         self.keyedit.setKeys(allKeys)
 
     def updateSelectedKeys(self):
-        selectedItems = self.designScene.selectedItems()
-        selectedKeys = [item for item in selectedItems if isinstance(item, Key)]
-        self.keyedit.setSelectedKeys(selectedKeys)
+        self.keyedit.setSelectedKeys([item for item in self.designScene.selectedItems() if isinstance(item, Key)])
+        print("hi")
+
+    def onTabChanged(self, index):
+        if self.tabs.widget(index) == self.optimizerTab:
+            self.showcaseScene.importFromDesignScene(self.designScene)
+            self.showcaseView.fitKeyboardInView()
 
 if __name__ == '__main__':
     app = QApplication([])

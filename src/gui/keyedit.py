@@ -15,13 +15,13 @@ class KeyEditorSidebar(QWidget):
     def initUI(self):
         layout = QVBoxLayout(self)
 
-        # Settings label : CHANGE THIS TO AN INPUT
+        # Settings label
         label = QLabel("Key Editor", self)
         label.setAlignment(Qt.AlignLeft)
         label.setStyleSheet("font-weight: bold; font-size: 18px")
-        # layout.addWidget(label)
+        layout.addWidget(label)
 
-        # Label label
+        # Label label : CHANGE THIS TO AN INPUT
         keyLabelLayout = QHBoxLayout()
         label = QLabel("Label:", self)
         self.keyLabel = QLabel("", self)
@@ -160,6 +160,5 @@ class KeyEditorSidebar(QWidget):
                 key.main_finger = False
 
     def onDeleteKey(self):
-        for key in self.selectedKeys:
-            self.scene.removeItem(key)
-        self.scene.fillKeyIndices()
+        if self.scene:
+            self.scene.onDeleteKey()
