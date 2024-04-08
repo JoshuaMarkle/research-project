@@ -26,6 +26,8 @@ class Key(QGraphicsItem):
         keyColorBorder = config.COLOR_SELECTED_BORDER if self.isSelected() else 'black'
         text = str(self.index)
 
+        if config.NORMAL_TOGGLE:
+            text = self.label
         if config.DIFFICULTY_TOGGLE:
             min_difficulty, max_difficulty = self.findDifficultyRange()
             keyColorTop, keyColor = self.mapDifficultyToColor(min_difficulty, max_difficulty, self.difficulty)

@@ -1,4 +1,3 @@
-import json
 from math import ceil
 
 from PyQt5.QtWidgets import *
@@ -6,7 +5,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
 import config
-from key import *
+from gui.key import *
+from algorithm.entry import OptimizationWorker
 
 class OptimizerSidebar(QWidget):
     def __init__(self):
@@ -28,6 +28,16 @@ class OptimizerSidebar(QWidget):
         label.setAlignment(Qt.AlignLeft)
         label.setStyleSheet("font-weight: bold")
         layout.addWidget(label)
+
+        # Toggle Normal View
+        normalToggleLayout = QHBoxLayout()
+        normalToggleLabel = QLabel("Toggle Normal View:", self)
+        self.normalToggleCheckbox = QCheckBox(self)
+        self.normalToggleCheckbox.setChecked(config.NORMAL_TOGGLE)
+        normalToggleLayout.addWidget(normalToggleLabel)
+        normalToggleLayout.addWidget(self.normalToggleCheckbox)
+        self.normalToggleCheckbox.stateChanged.connect(self.onToggleNormal)
+        layout.addLayout(normalToggleLayout)
 
         # Toggle Difficulty View
         difficultyToggleLayout = QHBoxLayout()
@@ -59,17 +69,38 @@ class OptimizerSidebar(QWidget):
         self.fingerRestToggleCheckbox.stateChanged.connect(self.onToggleFingerRestChanged)
         layout.addLayout(fingerRestToggleLayout)
 
+        # Start Opt Button
+        self.startOptimizationButton = QPushButton("Start Optimization", self)
+        layout.addWidget(self.startOptimizationButton)
+        self.startOptimizationButton.clicked.connect(self.startOptimization)
+
         # --- Spacer to make everything move to top ---
         label = QLabel()   
         layout.addWidget(label)
         verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
         layout.addItem(verticalSpacer)
 
+    def onToggleNormal(self, state):
+        if state == 2:
+            config.NORMAL_TOGGLE = True
+            config.DIFFICULTY_TOGGLE = False
+            config.FINGER_TOGGLE = False
+            config.FINGER_REST_TOGGLE = False
+            self.fingerToggleCheckbox.setChecked(False)
+            self.fingerRestToggleCheckbox.setChecked(False)
+            self.difficultyToggleCheckbox.setChecked(False)
+            if self.scene:
+                self.scene.update()
+        else:
+            config.NORMAL_TOGGLE = False
+
     def onToggleDifficultyChanged(self, state):
         if state == 2:
             config.DIFFICULTY_TOGGLE = True
+            config.NORMAL_TOGGLE = False
             config.FINGER_TOGGLE = False
             config.FINGER_REST_TOGGLE = False
+            self.normalToggleCheckbox.setChecked(False)
             self.fingerToggleCheckbox.setChecked(False)
             self.fingerRestToggleCheckbox.setChecked(False)
             if self.scene:
@@ -80,8 +111,10 @@ class OptimizerSidebar(QWidget):
     def onToggleFingerChanged(self, state):
         if state == 2:
             config.FINGER_TOGGLE = True
+            config.NORMAL_TOGGLE = False
             config.DIFFICULTY_TOGGLE = False
             config.FINGER_REST_TOGGLE = False
+            self.normalToggleCheckbox.setChecked(False)
             self.difficultyToggleCheckbox.setChecked(False)
             self.fingerRestToggleCheckbox.setChecked(False)
             if self.scene:
@@ -92,11 +125,26 @@ class OptimizerSidebar(QWidget):
     def onToggleFingerRestChanged(self, state):
         if state == 2:
             config.FINGER_REST_TOGGLE = True
+            config.NORMAL_TOGGLE = False
             config.DIFFICULTY_TOGGLE = False
             config.FINGER_TOGGLE = False
+            self.normalToggleCheckbox.setChecked(False)
             self.difficultyToggleCheckbox.setChecked(False)
             self.fingerToggleCheckbox.setChecked(False)
             if self.scene:
                 self.scene.update()
         else:
             config.FINGER_REST_TOGGLE = False
+
+    def startOptimization(self):
+        # self.optimizerWorker = OptimizationWorker()
+        # self.optimizerWorker.update_signal.connect(self.scene.optimizationUpdate)
+        # self.optimizerWorker.start()
+        
+        # Create a Thread for the optimization algorithm
+        self.thread = QThread()
+        self.worker = OptimizationWorker()
+        self.worker.moveToThread(self.thread)
+        self.worker.update.connect(self.scene.optimizationUpdate)
+        self.thread.started.connect(self.worker.run)
+        self.thread.start()

@@ -6,7 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
 import config
-from key import *
+from gui.key import *
 
 class Sidebar(QWidget):
     def __init__(self):

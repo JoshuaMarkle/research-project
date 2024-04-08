@@ -2,15 +2,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
-from scene import DesignScene, DesignView
-from showcase import ShowcaseScene, ShowcaseView
-from sidebar import Sidebar
-from optimizeside import OptimizerSidebar
-from keyedit import KeyEditorSidebar
-from key import *
-
-# User
-# I want to write a python gui that allows the user to create their own physical keyboard. I want to make it so the user can create keys, delete keys, change key characteristics (position, finger number, difficulty, and more), move around the keys on a grid. I want all of this to happen on the right side of the screen. On the left side of the screen, I want a small interactive sidebar that has a bunch of settings adjusters and nice things. For example it would have a toggler for difficulty that would then color all of the keys a shade of red based on the difficulty setting for that key. It would also have input for key size, grid size, import json, and export json. Do you understand this project
+from gui.scene import DesignScene, DesignView
+from gui.showcase import ShowcaseScene, ShowcaseView
+from gui.sidebar import Sidebar
+from gui.optimizeside import OptimizerSidebar
+from gui.keyedit import KeyEditorSidebar
+from gui.plot import PlotWindow
+from gui.key import *
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -86,9 +84,14 @@ class MainWindow(QMainWindow):
         self.showcaseSidebar.scene = self.showcaseScene
         splitter.addWidget(self.showcaseView)
 
+        # Add plot
+        self.plotWindow = PlotWindow()
+        splitter.addWidget(self.plotWindow)
+        self.showcaseScene.plotWindow = self.plotWindow
+
         # self.sidebarTabs.setMinimumWidth(200)
         # self.optimizerView.setMinimumWidth(500)
-        #
+        
         # self.optimizerScene.selectionChanged.connect(self.updateSelectedKeys)
         # self.optimizerScene.changed.connect(self.updateKeys)
 
@@ -104,9 +107,3 @@ class MainWindow(QMainWindow):
         if self.tabs.widget(index) == self.optimizerTab:
             self.showcaseScene.importFromDesignScene(self.designScene)
             self.showcaseView.fitKeyboardInView()
-
-if __name__ == '__main__':
-    app = QApplication([])
-    window = MainWindow()
-    window.show()
-    app.exec_()

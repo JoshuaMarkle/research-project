@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
 import config
-from key import *
+from gui.key import *
 
 class DesignScene(QGraphicsScene):
     def __init__(self, parent=None):

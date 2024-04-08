@@ -1,7 +1,48 @@
 import random
 import json
 
+# Sizes
+GRID_SIZE = 20
+GRID_HEIGHT = 100
+GRID_WIDTH = 100
+KEY_SIZE = 60
+
+# Colors
+COLOR_0 = "#ffffff"
+COLOR_1 = "#ff5768"
+COLOR_2 = "#ff8558"
+COLOR_3 = "#ffb347"
+COLOR_4 = "#dab551"
+COLOR_5 = "#b4b75b"
+COLOR_6 = "#23d18b"
+COLOR_7 = "#00cef1"
+COLOR_8 = "#55aaff"
+COLOR_9 = "#7ca3ff"
+COLOR_10 = "#a29bff"
+COLOR_DARK_0 = "#d0d0d0"
+COLOR_DARK_1 = "#ca2954"
+COLOR_DARK_2 = "#e9551e"
+COLOR_DARK_3 = "#e3a144"
+COLOR_DARK_4 = "#c59b2a"
+COLOR_DARK_5 = "#969843"
+COLOR_DARK_6 = "#20AB73"
+COLOR_DARK_7 = "#04b9d9"
+COLOR_DARK_8 = "#4D9BE8"
+COLOR_DARK_9 = "#7194E8"
+COLOR_DARK_10 = "#928ce4"
+COLOR_ALT = "#b0b0b0"
+COLOR_SELECTED_BORDER = COLOR_DARK_8
+
+# GUI Toggle
+NORMAL_TOGGLE = False
+DIFFICULTY_TOGGLE = False
+FINGER_TOGGLE = False
+FINGER_REST_TOGGLE = False
+
+# --- Optimization Parameters ---
+
 # Constants
+OPTIMIZATION_THREAD_BREAK_TIME = 0.1 # Ensure responsive UI (larger num = more repsonsive)
 KEY_COUNT = 30
 NUM_KEYBOARDS = 100
 NUM_GENERATIONS = 50

@@ -3,12 +3,13 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
 import config
-from key import *
+from gui.key import *
 
 class ShowcaseScene(QGraphicsScene):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.keys = None
+        self.plotWindow = None
         self.setBackgroundBrush(QColor(255, 255, 255))  # Set background color
         self.setSceneRect(0, 0, config.GRID_WIDTH * config.GRID_SIZE, config.GRID_HEIGHT * config.GRID_SIZE)
 
@@ -35,6 +36,12 @@ class ShowcaseScene(QGraphicsScene):
         padding = 20
         rect = self.itemsBoundingRect()
         self.setSceneRect(rect.adjusted(-padding, -padding, padding, padding))
+
+    def optimizationUpdate(self, data):
+        self.plotWindow.updatePlot(data[0], data[1])
+        layout = data[2]
+        for key in self.items():
+            key.label = layout[key.index - 1]
 
 class ShowcaseView(QGraphicsView):
     def __init__(self, scene, parent=None):
