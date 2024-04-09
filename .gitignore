@@ -1,3 +1,7 @@
 src/__pycache__
 src/gui/__pycache__
 src/algorithm/__pycache__
+
+# pyinstaller
+build
+dist
