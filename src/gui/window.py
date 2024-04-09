@@ -6,7 +6,6 @@ from gui.scene import DesignScene, DesignView
 from gui.showcase import ShowcaseScene, ShowcaseView
 from gui.sidebar import Sidebar
 from gui.optimizeside import OptimizerSidebar
-from gui.keyedit import KeyEditorSidebar
 from gui.plot import PlotWindow
 from gui.key import Key
 from gui.debug import DebugBox
@@ -42,25 +41,18 @@ class MainWindow(QMainWindow):
         splitter = QSplitter(Qt.Horizontal)
         editor_layout.addWidget(splitter)
 
-        self.sidebarTabs = QTabWidget(self)
-
         # Sidebar
         self.sidebar = Sidebar()
-        self.sidebarTabs.addTab(self.sidebar, "Settings")
-
-        # Key Editor
-        self.keyedit = KeyEditorSidebar()
-        self.sidebarTabs.addTab(self.keyedit, "Key Edit")
-        splitter.addWidget(self.sidebarTabs)
+        splitter.addWidget(self.sidebar)
 
         # Design area (scene and view)
         self.designScene = DesignScene()  # Assuming DesignScene() is defined elsewhere
         self.designView = DesignView(self.designScene)  # Assuming DesignView() is defined elsewhere
         self.sidebar.scene = self.designScene
-        self.keyedit.scene = self.designScene
+        self.sidebar.scene = self.designScene
         splitter.addWidget(self.designView)
 
-        self.sidebarTabs.setMinimumWidth(200)
+        self.sidebar.setMinimumWidth(200)
         self.designView.setMinimumWidth(500)
 
         self.designScene.selectionChanged.connect(self.updateSelectedKeys)
@@ -96,16 +88,16 @@ class MainWindow(QMainWindow):
         splitter.addWidget(plotDebugWidget)  
         self.showcaseSidebar.debugBox = self.debugBox
 
-        self.sidebarTabs.setMinimumWidth(200)
+        self.showcaseSidebar.setMinimumWidth(200)
         self.showcaseView.setMinimumWidth(200)
         plotDebugWidget.setMinimumWidth(500)
 
     def updateKeys(self):
         allKeys = [item for item in self.designScene.items() if isinstance(item, Key)]
-        self.keyedit.setKeys(allKeys)
+        self.sidebar.setKeys(allKeys)
 
     def updateSelectedKeys(self):
-        self.keyedit.setSelectedKeys([item for item in self.designScene.selectedItems() if isinstance(item, Key)])
+        self.sidebar.setSelectedKeys([item for item in self.designScene.selectedItems() if isinstance(item, Key)])
         print("hi")
 
     def onTabChanged(self, index):
