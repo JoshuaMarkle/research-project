@@ -27,7 +27,7 @@ class Key(QGraphicsItem):
         text = str(self.index)
 
         if config.NORMAL_TOGGLE:
-            text = self.label
+            text = self.label.upper()
         if config.DIFFICULTY_TOGGLE:
             min_difficulty, max_difficulty = self.findDifficultyRange()
             keyColorTop, keyColor = self.mapDifficultyToColor(min_difficulty, max_difficulty, self.difficulty)
@@ -76,8 +76,8 @@ class Key(QGraphicsItem):
         self.setPos(pos)
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent):
-        self.startPos = self.pos()  # Record the starting position
-        super().mousePressEvent(event)  # Call the superclass method to ensure default behavior
+        self.startPos = self.pos() # Start of the selection
+        super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent):
         # Original position of the key being dragged before moving

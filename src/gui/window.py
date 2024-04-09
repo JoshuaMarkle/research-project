@@ -8,7 +8,8 @@ from gui.sidebar import Sidebar
 from gui.optimizeside import OptimizerSidebar
 from gui.keyedit import KeyEditorSidebar
 from gui.plot import PlotWindow
-from gui.key import *
+from gui.key import Key
+from gui.debug import DebugBox
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -84,16 +85,20 @@ class MainWindow(QMainWindow):
         self.showcaseSidebar.scene = self.showcaseScene
         splitter.addWidget(self.showcaseView)
 
-        # Add plot
+        # Add plot & debug box
+        plotDebugWidget = QWidget()
+        plotDebugLayout = QVBoxLayout(plotDebugWidget)
         self.plotWindow = PlotWindow()
-        splitter.addWidget(self.plotWindow)
-        self.showcaseScene.plotWindow = self.plotWindow
+        self.showcaseScene.plotWindow = self.plotWindow  
+        self.debugBox = DebugBox()
+        plotDebugLayout.addWidget(self.plotWindow)
+        plotDebugLayout.addWidget(self.debugBox)
+        splitter.addWidget(plotDebugWidget)  
+        self.showcaseSidebar.debugBox = self.debugBox
 
-        # self.sidebarTabs.setMinimumWidth(200)
-        # self.optimizerView.setMinimumWidth(500)
-        
-        # self.optimizerScene.selectionChanged.connect(self.updateSelectedKeys)
-        # self.optimizerScene.changed.connect(self.updateKeys)
+        self.sidebarTabs.setMinimumWidth(200)
+        self.showcaseView.setMinimumWidth(200)
+        plotDebugWidget.setMinimumWidth(500)
 
     def updateKeys(self):
         allKeys = [item for item in self.designScene.items() if isinstance(item, Key)]

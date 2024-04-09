@@ -12,6 +12,7 @@ class OptimizerSidebar(QWidget):
     def __init__(self):
         super().__init__()
         self.scene = None
+        self.debugBox = None
         self.initUI()
 
     def initUI(self):
@@ -137,14 +138,11 @@ class OptimizerSidebar(QWidget):
             config.FINGER_REST_TOGGLE = False
 
     def startOptimization(self):
-        # self.optimizerWorker = OptimizationWorker()
-        # self.optimizerWorker.update_signal.connect(self.scene.optimizationUpdate)
-        # self.optimizerWorker.start()
-        
         # Create a Thread for the optimization algorithm
         self.thread = QThread()
         self.worker = OptimizationWorker()
         self.worker.moveToThread(self.thread)
         self.worker.update.connect(self.scene.optimizationUpdate)
+        self.worker.update.connect(self.debugBox.write)
         self.thread.started.connect(self.worker.run)
         self.thread.start()
