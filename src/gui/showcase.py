@@ -42,6 +42,7 @@ class ShowcaseScene(QGraphicsScene):
         layout = data[2]
         for key in self.items():
             key.label = layout[key.index - 1]
+        self.update() # Trigger a repaint
 
 class ShowcaseView(QGraphicsView):
     def __init__(self, scene, parent=None):

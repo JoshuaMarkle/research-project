@@ -18,16 +18,6 @@ class DesignScene(QGraphicsScene):
         centerX = self.width() / 2 - 5 * config.KEY_SIZE
         centerY = self.height() / 2 - 5 * config.KEY_SIZE
 
-        # Generate a standard layout
-        # abcs = "qwertyuiopasdfghjkl;zxcvbnm,./".upper()
-        # for i in range(3):
-        #     for j in range(10):
-        #         x = centerX + j * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2 + config.GRID_SIZE * i
-        #         y = centerY + i * ceil(config.KEY_SIZE / config.GRID_SIZE) * config.GRID_SIZE - config.KEY_SIZE / 2
-        #         keyPosition = QPointF(x, y)
-        #         key = Key(abcs[j + 10 * i], keyPosition, j + 1, j % 5 + 1, len(self.items()))
-        #         self.addItem(key)
-
     def drawBackground(self, painter: QPainter, rect):
         self.gridSize = config.GRID_SIZE
         self.setSceneRect(0, 0, config.GRID_WIDTH * config.GRID_SIZE, config.GRID_HEIGHT * config.GRID_SIZE)

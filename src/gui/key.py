@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 
 import config
+import time
 
 class Key(QGraphicsItem):
     def __init__(self, letter, position, finger_number, difficulty, resting_pos, ind, parent=None):

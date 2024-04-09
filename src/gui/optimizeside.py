@@ -13,6 +13,7 @@ class OptimizerSidebar(QWidget):
         super().__init__()
         self.scene = None
         self.debugBox = None
+        self.thread = QThread()
         self.initUI()
 
     def initUI(self):
@@ -138,11 +139,21 @@ class OptimizerSidebar(QWidget):
             config.FINGER_REST_TOGGLE = False
 
     def startOptimization(self):
+        # Check for current thread
+        if self.thread.isRunning():
+            self.debugBox.write("Cannot Start; Optimization Is Running!")
+            return
+
         # Create a Thread for the optimization algorithm
-        self.thread = QThread()
         self.worker = OptimizationWorker()
         self.worker.moveToThread(self.thread)
+        self.debugBox.write("Starting Optimization...")
         self.worker.update.connect(self.scene.optimizationUpdate)
-        self.worker.update.connect(self.debugBox.write)
+        self.worker.update.connect(self.debugBox.dataWrite)
         self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.completeMessage)
         self.thread.start()
+
+    def completeMessage(self):
+        self.debugBox.write("Complete Optimization")
+        self.thread.quit()
