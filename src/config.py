@@ -1,7 +1,11 @@
 import random
 import json
 
-# Sizes
+# Application Settings
+DEFAULT_FONT_SIZE = 12
+ENABLE_AUTOSAVE = False
+
+# Size
 GRID_SIZE = 20
 GRID_HEIGHT = 100
 GRID_WIDTH = 100
@@ -42,10 +46,10 @@ FINGER_REST_TOGGLE = False
 # --- Optimization Parameters ---
 
 # Constants
-OPTIMIZATION_THREAD_BREAK_TIME = 0.1 # Ensure responsive UI (larger num = more repsonsive)
+OPTIMIZATION_THREAD_BREAK_TIME = 0.05 # Ensure responsive UI (larger num = more repsonsive)
 KEY_COUNT = 30
 NUM_KEYBOARDS = 100
-NUM_GENERATIONS = 50
+NUM_GENERATIONS = 1000
 MAX_MUTATIONS = 1
 
 # Weights

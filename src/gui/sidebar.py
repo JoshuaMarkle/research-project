@@ -106,44 +106,11 @@ class Sidebar(QWidget):
         self.fingerRestToggleCheckbox.stateChanged.connect(self.onToggleFingerRestChanged)
         layout.addLayout(fingerRestToggleLayout)
 
-        # Add Key Button
-        addKeyButton = QPushButton("Add Key", self)  
-        addKeyButton.pressed.connect(self.onAddKey)  
-        layout.addWidget(addKeyButton)
-
-        # Delete Key Button
-        deleteKeyButton = QPushButton("Delete Key", self)  
-        deleteKeyButton.pressed.connect(self.onDeleteKey)  
-        layout.addWidget(deleteKeyButton)
-
-        # Preset label
+        # Templates label
         label = QLabel("Template Layouts", self)
         label.setAlignment(Qt.AlignLeft)
         label.setStyleSheet("font-weight: bold")
         layout.addWidget(label)
-
-        # Preset dropdown
-        keyboardLayoutDropdown = QComboBox(self)
-        keyboardLayoutDropdown.addItem("Standard")
-        keyboardLayoutDropdown.addItem("Corne")
-        keyboardLayoutDropdown.addItem("100%")
-        layout.addWidget(keyboardLayoutDropdown)
-
-        # Json label
-        label = QLabel("Json Toggle", self)
-        label.setAlignment(Qt.AlignLeft)
-        label.setStyleSheet("font-weight: bold")
-        layout.addWidget(label)
-
-        # Export Json Button
-        exportJsonButton = QPushButton("Export JSON", self)  
-        exportJsonButton.pressed.connect(self.onExportJson)  
-        layout.addWidget(exportJsonButton)
-
-        # Import Json Button
-        importJsonButton = QPushButton("Import JSON", self)  
-        importJsonButton.pressed.connect(self.onImportJson)  
-        layout.addWidget(importJsonButton)
 
         # Keyedit label
         label = QLabel("Key Editor", self)
@@ -209,6 +176,51 @@ class Sidebar(QWidget):
         mainFingerToggleLayout.addWidget(self.mainFingerToggleCheckbox)
         self.mainFingerToggleCheckbox.stateChanged.connect(self.onToggleFingerRestChanged)
         layout.addLayout(mainFingerToggleLayout)
+
+        # Add Key Button
+        addKeyButton = QPushButton("Add Key", self)  
+        addKeyButton.pressed.connect(self.onAddKey)  
+        layout.addWidget(addKeyButton)
+
+        # Delete Key Button
+        deleteKeyButton = QPushButton("Delete Key", self)  
+        deleteKeyButton.pressed.connect(self.onDeleteKey)  
+        layout.addWidget(deleteKeyButton)
+
+        # Import/Expart label
+        label = QLabel("Import Export", self)
+        label.setAlignment(Qt.AlignLeft)
+        label.setStyleSheet("font-weight: bold; font-size: 18px")
+        layout.addWidget(label)
+
+        # Templates label
+        label = QLabel("Templates", self)
+        label.setAlignment(Qt.AlignLeft)
+        label.setStyleSheet("font-weight: bold")
+        layout.addWidget(label)
+
+        # Preset dropdown
+        keyboardLayoutDropdown = QComboBox(self)
+        keyboardLayoutDropdown.addItem("Standard")
+        keyboardLayoutDropdown.addItem("Corne")
+        keyboardLayoutDropdown.addItem("100%")
+        layout.addWidget(keyboardLayoutDropdown)
+
+        # Json label
+        label = QLabel("Json Toggle", self)
+        label.setAlignment(Qt.AlignLeft)
+        label.setStyleSheet("font-weight: bold")
+        layout.addWidget(label)
+
+        # Export Json Button
+        exportJsonButton = QPushButton("Export JSON", self)  
+        exportJsonButton.pressed.connect(self.onExportJson)  
+        layout.addWidget(exportJsonButton)
+
+        # Import Json Button
+        importJsonButton = QPushButton("Import JSON", self)  
+        importJsonButton.pressed.connect(self.onImportJson)  
+        layout.addWidget(importJsonButton)
 
         # --- Spacer to make everything move to top ---
         label = QLabel()   

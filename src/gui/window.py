@@ -9,6 +9,7 @@ from gui.optimizeside import OptimizerSidebar
 from gui.plot import PlotWindow
 from gui.key import Key
 from gui.debug import DebugBox
+from gui.settings import SettingsTab
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -32,6 +33,10 @@ class MainWindow(QMainWindow):
         self.optimizerTab = QWidget()
         self.tabs.addTab(self.optimizerTab, "Optimizer")
         self.initOptimizerUI()
+
+        # Settings tab
+        self.settingsTab = SettingsTab()
+        self.tabs.addTab(self.settingsTab, "Settings")
 
     def initEditorUI(self):
         # Layout for the Editor tab
