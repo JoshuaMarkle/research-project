@@ -46,20 +46,21 @@ FINGER_REST_TOGGLE = False
 # --- Optimization Parameters ---
 
 # Constants
-OPTIMIZATION_THREAD_BREAK_TIME = 0.05 # Ensure responsive UI (larger num = more repsonsive)
+OPTIMIZATION_THREAD_BREAK_TIME = 0.01 # Ensure responsive UI (larger num = more repsonsive)
 KEY_COUNT = 30
 NUM_KEYBOARDS = 100
-NUM_GENERATIONS = 1000
-MAX_MUTATIONS = 1
+NUM_GENERATIONS = 10000
+MAX_MUTATIONS = 2
 
 # Weights
-WEIGHT_DISTANCE = 1
-WEIGHT_EFFORT = 1
-WEIGHT_BIGRAM = 10
+WEIGHT_DISTANCE = 2
+WEIGHT_EFFORT = 2
+WEIGHT_BIGRAM = 5
 
 # Default layouts
 qwerty = list("qwertyuiopasdfghjkl;zxcvbnm,./")
 dvorak = list("',.pyfgcrlaoeuidhtns;qjkxbmwvz")
+colemak = list("qwfpgjluy;arstdhneiozxcvbkm,./")
 abcs = "abcdefghijklmnopqrstuvwxyz;',."
 
 def random_layout():

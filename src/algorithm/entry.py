@@ -61,6 +61,11 @@ def optimization_loop(callback):
 #         while not self.isInterruptionRequested():
 #             optimization_loop(self.update_signal.emit)
 
+print("DVORAK:", -calculate_value("".join(config.dvorak)))
+print("COLEMAK:", -calculate_value("".join(config.colemak)))
+print("Qwerty:", -calculate_value("".join(config.qwerty)))
+print("ABCs:", -calculate_value("".join(config.abcs)))
+
 class OptimizationWorker(QObject):
     update = pyqtSignal(list)
     finished = pyqtSignal()
